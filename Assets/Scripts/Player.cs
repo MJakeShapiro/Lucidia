@@ -174,6 +174,8 @@ public class Player : MonoBehaviour
     }
     #endregion Movement
 
+    #region Abilities
+
     #region Dash
     /// <summary>
     /// Dashes player according to dashSpeed. DiagonalDash option.
@@ -247,7 +249,9 @@ public class Player : MonoBehaviour
     }
     #endregion Dash
 
-   
+    #endregion Abilities
+
+
 
 
 }
