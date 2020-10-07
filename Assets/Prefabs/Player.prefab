@@ -40,10 +40,10 @@ GameObject:
   m_Component:
   - component: {fileID: 513852707028939513}
   - component: {fileID: 513852707028939514}
-  - component: {fileID: 8177747522891384600}
   - component: {fileID: 513852707028939515}
   - component: {fileID: 1705009979}
   - component: {fileID: 1988835032}
+  - component: {fileID: 1838956889}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -117,32 +117,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8177747522891384600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 513852707028939508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 707113222d09a274499c8867fea579d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashEffect: {fileID: 5502138560353755212, guid: 926e8d57fb52824479bf006a1f36cc58, type: 3}
-  feetPos: {fileID: 455711956}
-  checkRadius: 0.1
-  ground:
-    serializedVersion: 2
-    m_Bits: 256
-  moveSpeed: 5
-  jumpForce: 17
-  MIN_JUMP_COUNTER: 0.17
-  dashSpeed: 50
-  TOTAL_DASH_TIME: 0.1
-  MIN_DASH_COOLDOWN: 0.5
-  variableJump: 1
-  startWithDash: 1
 --- !u!50 &513852707028939515
 Rigidbody2D:
   serializedVersion: 4
@@ -218,3 +192,26 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1838956889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513852707028939508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f4f1c20cb965741a1def3325eaea65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashEffect: {fileID: 0}
+  feetPos: {fileID: 455711956}
+  moveSpeed: 5
+  jumpForce: 17
+  MIN_JUMP_COUNTER: 0.17
+  dashSpeed: 50
+  TOTAL_DASH_TIME: 0.1
+  MIN_DASH_COOLDOWN: 1
+  variableJump: 1
+  startWithDash: 1
+  diagonalDash: 0

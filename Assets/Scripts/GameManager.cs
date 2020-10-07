@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject player;
-    public PlayerMovement playerMovement;
+    public Player player;
+    [SerializeField] private LayerMask ground;
+    [SerializeField] public float checkRadius;
+
 
 
     //setup of singleton entity
@@ -17,6 +19,14 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        playerMovement = player.GetComponent<PlayerMovement>();
+    }
+
+    /// <summary>
+    /// Checks if player's feet are on ground
+    /// </summary>
+    /// <returns>True if player is on ground. False otherwise</returns>
+    public bool IsGrounded(Transform feetPos)
+    {
+        return Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
     }
 }

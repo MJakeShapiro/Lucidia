@@ -4,7 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
     #region Properties
 
@@ -18,32 +18,31 @@ public class PlayerMovement : MonoBehaviour
 
     // Holds player position
     private Rigidbody2D rb;
-    [SerializeField] private Transform feetPos;
-    [SerializeField] private float checkRadius;
-    [SerializeField] private LayerMask ground;
+    [SerializeField] public Transform feetPos;
+
 
     [Space]
-    [SerializeField] private float moveSpeed = 5.0f, jumpForce = 3.0f;
-    [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.2f;
+    [SerializeField] private float moveSpeed = 5.0f, jumpForce = .0f;
+    [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.17f;
     private float jumpCounter = 0;
 
     [Space]
     [SerializeField] private float dashSpeed = 50.0f;
-    [SerializeField] public float TOTAL_DASH_TIME;
+    [SerializeField] public float TOTAL_DASH_TIME = 0.1f;
     private float dashTime;
 
-    [SerializeField] private float MIN_DASH_COOLDOWN;
+    [SerializeField] private float MIN_DASH_COOLDOWN = 1;
     private float dashCooldown;
     private bool canDash;
 
     //Movement States
     private bool isJumping = false;
     private bool cancelJumpingQueue = false;
-    private bool isDashing = false;
-    private bool facingLeft = false, facingRight = true, facingUp = false, facingDown = false;
+    private bool isDashing = false, hasAirDashed = false;
+    private Direction direction;
 
     [Space]
-    [Tooltip("allows player to cancel jump early")][SerializeField] private bool variableJump = true;
+    [Tooltip("allows player to cancel jump early")] [SerializeField] private bool variableJump = true;
     [SerializeField] private bool startWithDash = false, diagonalDash = false;
 
 
@@ -64,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         controls.Player.Movement.Enable();
         controls.Player.Jump.Enable();
@@ -72,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
             controls.Player.Dash.Enable();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         controls.Player.Movement.Disable();
         controls.Player.Jump.Disable();
@@ -84,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
     #region Update Methods
     private void Update()
     {
-        if(variableJump)
+        if (variableJump)
             JumpQueue();
         DashCounter();
 
@@ -95,6 +94,9 @@ public class PlayerMovement : MonoBehaviour
         Movement();
     }
 
+    #endregion Update Methods
+
+    #region Movement
     /// <summary>
     /// Takes player input every frame and saves for fixed movement
     /// </summary>
@@ -103,31 +105,19 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = controls.Player.Movement.ReadValue<Vector2>();
         if (moveDirection.x > 0.0f)
         {
-            facingRight = true;
-            facingLeft = false;
-            facingUp = false;
-            facingDown = false;
+            direction = Direction.right;
         }
         else if (moveDirection.x < 0.0f)
         {
-            facingRight = false;
-            facingLeft = true;
-            facingUp = false;
-            facingDown = false;
+            direction = Direction.left;
         }
         else if (moveDirection.y > 0.0f)
         {
-            facingRight = false;
-            facingLeft = false;
-            facingUp = true;
-            facingDown = false;
+            direction = Direction.up;
         }
         else if (moveDirection.y < 0.0f)
         {
-            facingRight = false;
-            facingLeft = false;
-            facingUp = false;
-            facingDown = true;
+            direction = Direction.down;
         }
     }
 
@@ -138,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isDashing)
         {
-                rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
         }
     }
 
@@ -147,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void Jump()
     {
-        if (IsGrounded())
+        if (GameManager.Instance.IsGrounded(feetPos))
         {
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -182,7 +172,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    #endregion Movement
 
+    #region Dash
     /// <summary>
     /// Dashes player according to dashSpeed. DiagonalDash option.
     /// </summary>
@@ -190,25 +182,28 @@ public class PlayerMovement : MonoBehaviour
     {
         if (canDash)
         {
+            if (!GameManager.Instance.IsGrounded(feetPos))
+                hasAirDashed = true;
+
             isDashing = true;
             rb.gravityScale = 0.0f;
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
             {
-                if (facingRight)
+                if (direction == Direction.right)
                 {
                     rb.velocity = Vector2.right * dashSpeed;
                 }
-                else if (facingLeft)
+                else if (direction == Direction.left)
                 {
                     rb.velocity = Vector2.left * dashSpeed;
                 }
-                else if (facingUp)
+                else if (direction == Direction.up)
                 {
                     rb.velocity = Vector2.up * dashSpeed;
                 }
-                else if (facingDown && !IsGrounded())
+                else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
                 {
                     rb.velocity = Vector2.down * dashSpeed;
                 }
@@ -240,23 +235,19 @@ public class PlayerMovement : MonoBehaviour
 
         if (!canDash)
             dashCooldown -= Time.deltaTime;
-        if (IsGrounded())
+        if (dashCooldown <= 0.0f)
         {
-            if (dashCooldown <= 0.0f)
+            if (GameManager.Instance.IsGrounded(feetPos) || !hasAirDashed)
+            {
                 canDash = true;
+                hasAirDashed = false;
+            }
+            
         }
     }
+    #endregion Dash
 
+   
 
-    /// <summary>
-    /// Checks if player's feet are on ground
-    /// </summary>
-    /// <returns>True if player is on ground. False otherwise</returns>
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
-    }
-
-    #endregion Update Methods
 
 }
