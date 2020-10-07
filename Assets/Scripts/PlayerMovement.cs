@@ -142,6 +142,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Jumps Player and sets counter for Variable Jump
+    /// </summary>
     private void Jump()
     {
         if (IsGrounded())
@@ -152,19 +155,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets cancelJumpQueue to stop jump after minimum jump has been reached
+    /// </summary>
     private void CancelJump()
     {
         isJumping = false;
         cancelJumpingQueue = true;
     }
 
+    /// <summary>
+    /// Decreases jumpCounter to ensure MIN_JUMP_COUNTER
+    /// </summary>
     private void JumpQueue()
     {
-        if (isJumping || cancelJumpingQueue)
+        if (isJumping || cancelJumpingQueue)                        // Is the player still jumping or have they released the jump button?
         {
             jumpCounter -= Time.deltaTime;
         }
-        if (cancelJumpingQueue && jumpCounter <= 0.0f)
+        if (cancelJumpingQueue && jumpCounter <= 0.0f)              // Has player reached minimum jump height?
         {
             cancelJumpingQueue = false;
             if (rb.velocity.y > 0.0)
@@ -174,6 +183,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Dashes player according to dashSpeed. DiagonalDash option.
+    /// </summary>
     private void Dash()
     {
         if (canDash)
@@ -204,6 +216,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Manages dash distance according to TOTAL_DASH_TIME
+    /// </summary>
     private void DashCounter()
     {
         if (isDashing)
@@ -232,6 +247,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Checks if player's feet are on ground
+    /// </summary>
+    /// <returns>True if player is on ground. False otherwise</returns>
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
