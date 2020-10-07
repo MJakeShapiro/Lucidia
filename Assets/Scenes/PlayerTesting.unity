@@ -453,7 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a391aacf915c5ed489bd52690cf6ae38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 513852707028939508, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+  playerMovement: {fileID: 0}
 --- !u!4 &1083782525
 Transform:
   m_ObjectHideFlags: 0
@@ -523,9 +524,53 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 513852707028939515, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 513852707028939515, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: cbf468c7dd3e56d4f8194518c33024d8, type: 2}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: variableJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: startWithDash
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: dashSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: dashEffect
+      value: 
+      objectReference: {fileID: 5502138560353755212, guid: 926e8d57fb52824479bf006a1f36cc58, type: 3}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: startDashTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: useVelocity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: MIN_DASH_COOLDOWN
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
       propertyPath: diagonalDash
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177747522891384600, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: TOTAL_DASH_TIME
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0aac1a678d60efb479e761aa50748981, type: 3}

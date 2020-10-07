@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public Player player;
+    public GameObject player;
+    public PlayerMovement playerMovement;
 
 
     //setup of singleton entity
@@ -16,7 +17,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        playerMovement = player.GetComponent<PlayerMovement>();
     }
-
-
 }
