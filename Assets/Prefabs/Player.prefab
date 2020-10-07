@@ -129,16 +129,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 707113222d09a274499c8867fea579d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  jumpForce: 17
-  MIN_JUMP_COUNTER: 0.17
+  dashEffect: {fileID: 5502138560353755212, guid: 926e8d57fb52824479bf006a1f36cc58, type: 3}
   feetPos: {fileID: 455711956}
   checkRadius: 0.1
   ground:
     serializedVersion: 2
     m_Bits: 256
+  moveSpeed: 5
+  jumpForce: 17
+  MIN_JUMP_COUNTER: 0.17
+  dashSpeed: 50
+  TOTAL_DASH_TIME: 0.1
+  MIN_DASH_COOLDOWN: 0.5
   variableJump: 1
-  useVelocity: 1
+  startWithDash: 1
 --- !u!50 &513852707028939515
 Rigidbody2D:
   serializedVersion: 4
@@ -155,10 +159,10 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 4
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: cbf468c7dd3e56d4f8194518c33024d8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &1705009979
 CircleCollider2D:

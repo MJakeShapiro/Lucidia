@@ -7,8 +7,6 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     #region Properties
-    
-
 
     // Takes players input
     private InputMaster controls;
@@ -16,39 +14,37 @@ public class PlayerMovement : MonoBehaviour
     // Holds player input
     private Vector2 moveDirection;
 
-    [SerializeField] private float moveSpeed = 5.0f, jumpForce = 3.0f;
-    [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.2f;
-    private float jumpCounter = 0;
-
-    [SerializeField] private float dashSpeed = 50.0f;
-    [SerializeField] public float startDashTime;
-    private float dashTime;
-
-    [SerializeField] private float MIN_DASH_COOLDOWN;
-    private float dashCooldown;
-    private bool canDash;
-
-
     public GameObject dashEffect;
-
 
     // Holds player position
     private Rigidbody2D rb;
     [SerializeField] private Transform feetPos;
     [SerializeField] private float checkRadius;
     [SerializeField] private LayerMask ground;
-    private int direction;
+
+    [Space]
+    [SerializeField] private float moveSpeed = 5.0f, jumpForce = 3.0f;
+    [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.2f;
+    private float jumpCounter = 0;
+
+    [Space]
+    [SerializeField] private float dashSpeed = 50.0f;
+    [SerializeField] public float TOTAL_DASH_TIME;
+    private float dashTime;
+
+    [SerializeField] private float MIN_DASH_COOLDOWN;
+    private float dashCooldown;
+    private bool canDash;
 
     //Movement States
     private bool isJumping = false;
     private bool cancelJumpingQueue = false;
     private bool isDashing = false;
-   [SerializeField] private bool facingLeft = false, facingRight = true, facingUp = false, facingDown = false;
+    private bool facingLeft = false, facingRight = true, facingUp = false, facingDown = false;
 
     [Space]
     [Tooltip("allows player to cancel jump early")][SerializeField] private bool variableJump = true;
-    [SerializeField] private bool useVelocity = false;
-    [SerializeField] private bool startWithDash = false;
+    [SerializeField] private bool startWithDash = false, diagonalDash = false;
 
 
     #endregion Properties
@@ -142,10 +138,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isDashing)
         {
-            if (useVelocity)
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
-            else
-                rb.MovePosition(rb.position + (moveDirection * moveSpeed * Time.fixedDeltaTime));
         }
     }
 
@@ -186,13 +179,27 @@ public class PlayerMovement : MonoBehaviour
         if (canDash)
         {
             isDashing = true;
-            if (facingRight)
+            rb.gravityScale = 0.0f;
+            if (diagonalDash)
+                rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
+            else
             {
-                rb.velocity = Vector2.right * dashSpeed;
-            }
-            else if (facingLeft)
-            {
-                rb.velocity = Vector2.left * dashSpeed;
+                if (facingRight)
+                {
+                    rb.velocity = Vector2.right * dashSpeed;
+                }
+                else if (facingLeft)
+                {
+                    rb.velocity = Vector2.left * dashSpeed;
+                }
+                else if (facingUp)
+                {
+                    rb.velocity = Vector2.up * dashSpeed;
+                }
+                else if (facingDown && !IsGrounded())
+                {
+                    rb.velocity = Vector2.down * dashSpeed;
+                }
             }
         }
     }
@@ -203,8 +210,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (dashTime <= 0.0f)
             {
-                dashTime = startDashTime;
+                dashTime = TOTAL_DASH_TIME;
                 rb.velocity = Vector2.zero;
+                rb.gravityScale = 4.0f;
                 isDashing = false;
                 canDash = false;
                 dashCooldown = MIN_DASH_COOLDOWN;
