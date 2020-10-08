@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
 
     [Space]
-    [SerializeField] private float moveSpeed = 5.0f, jumpForce = .0f;
+    [SerializeField] private float moveSpeed = 5.0f, jumpForce = 17.0f;
     [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.17f;
     private float jumpCounter = 0;
 

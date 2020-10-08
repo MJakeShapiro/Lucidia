@@ -207,11 +207,11 @@ MonoBehaviour:
   dashEffect: {fileID: 0}
   feetPos: {fileID: 455711956}
   moveSpeed: 5
-  jumpForce: 17
+  jumpForce: 20
   MIN_JUMP_COUNTER: 0.17
   dashSpeed: 50
   TOTAL_DASH_TIME: 0.1
-  MIN_DASH_COOLDOWN: 1
-  variableJump: 1
-  startWithDash: 1
+  MIN_DASH_COOLDOWN: 0.5
+  variableJump: 0
+  startWithDash: 0
   diagonalDash: 0
