@@ -8,6 +8,10 @@ public class Player : MonoBehaviour
 {
     #region Properties
 
+    //Animator for the player
+    public Animator animator;
+    private bool m_FacingRight = true;
+
     // Takes players input
     private InputMaster controls;
 
@@ -106,10 +110,20 @@ public class Player : MonoBehaviour
         if (moveDirection.x > 0.0f)
         {
             direction = Direction.right;
+            if (m_FacingRight == false)
+            {
+                Flip();
+            }
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.x < 0.0f)
         {
             direction = Direction.left;
+            if(m_FacingRight == true)
+            {
+                Flip();
+            }
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.y > 0.0f)
         {
@@ -119,6 +133,10 @@ public class Player : MonoBehaviour
         {
             direction = Direction.down;
         }
+        else
+        {
+            animator.SetBool("IsRunning", false);
+        }
     }
 
     /// <summary>
@@ -126,6 +144,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Movement()
     {
+        
         if (!isDashing)
         {
             rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
@@ -246,6 +265,16 @@ public class Player : MonoBehaviour
             }
             
         }
+    }
+
+    private void Flip()
+    {
+        // Switch the way the player is labelled as facing.
+        m_FacingRight = !m_FacingRight;
+
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
     #endregion Dash
 
