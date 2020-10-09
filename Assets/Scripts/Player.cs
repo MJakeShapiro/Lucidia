@@ -201,8 +201,10 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Dash()
     {
+        animator.SetBool("IsDashing", false);
         if (canDash)
         {
+            animator.SetBool("IsDashing", true);
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
@@ -228,6 +230,7 @@ public class Player : MonoBehaviour
                 {
                     rb.velocity = Vector2.down * dashSpeed;
                 }
+
             }
         }
     }
@@ -269,7 +272,6 @@ public class Player : MonoBehaviour
 
     private void Flip()
     {
-        // Switch the way the player is labelled as facing.
         m_FacingRight = !m_FacingRight;
 
         Vector3 theScale = transform.localScale;
