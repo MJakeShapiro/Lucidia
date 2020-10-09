@@ -204,7 +204,8 @@ public class Player : MonoBehaviour
             dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
 
-            Instantiate(dashEffect,transform.position,Quaternion.identity);
+            GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
+            Destroy(DashEffectToDestroy, 0.15f);
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
@@ -225,7 +226,6 @@ public class Player : MonoBehaviour
                 {
                     rb.velocity = Vector2.down * dashSpeed;
                 }
-                Debug.Log("DASH!");
             }
         }
     }
