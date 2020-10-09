@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a391aacf915c5ed489bd52690cf6ae38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1838956889, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
   ground:
     serializedVersion: 2
     m_Bits: 256
