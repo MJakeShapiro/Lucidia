@@ -204,14 +204,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4f1c20cb965741a1def3325eaea65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashEffect: {fileID: 0}
   feetPos: {fileID: 455711956}
-  moveSpeed: 5
+  moveSpeed: 6
   jumpForce: 20
   MIN_JUMP_COUNTER: 0.17
+  dashEffect: {fileID: 5502138560353755212, guid: 926e8d57fb52824479bf006a1f36cc58, type: 3}
   dashSpeed: 50
   TOTAL_DASH_TIME: 0.1
   MIN_DASH_COOLDOWN: 0.5
+  isDashing: 0
+  hasAirDashed: 0
+  isJumping: 0
   variableJump: 0
   startWithDash: 0
   diagonalDash: 0
