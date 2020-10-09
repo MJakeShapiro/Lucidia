@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if player's feet are on ground
+    /// Checks if object's feet are on ground
     /// </summary>
-    /// <returns>True if player is on ground. False otherwise</returns>
+    /// <returns>True if object is on ground. False otherwise</returns>
     public bool IsGrounded(Transform feetPos)
     {
         return Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);

@@ -264,5 +264,12 @@ public class Player : MonoBehaviour
     }
     #endregion Dash
 
+    #region Sword Attack
+    private void SwordBoop()
+    {
+
+    }
+    #endregion Sword Attack
+
     #endregion Abilities
 }
