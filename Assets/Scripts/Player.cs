@@ -6,13 +6,21 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    #region Properties
+    #region Art/Animation
+
 
     //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
     public bool GetSword;
     public GameObject sword_sprite;
+
+
+    #endregion Art/Animation
+
+    #region Properties
+
+
 
     // Takes players input
     private InputMaster controls;
