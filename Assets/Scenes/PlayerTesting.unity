@@ -285,7 +285,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -783,6 +783,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1341502035}
     - target: {fileID: 1838956889, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
+      propertyPath: variableJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1838956889, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
       propertyPath: startWithDash
       value: 1
       objectReference: {fileID: 0}
@@ -800,11 +804,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 513852707028939513, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.52
+      value: -19.2
       objectReference: {fileID: 0}
     - target: {fileID: 513852707028939513, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.711
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 513852707028939513, guid: 0aac1a678d60efb479e761aa50748981, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1530,10 +1534,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2663663662728573843, guid: fa0855990489eca4ba5af227de1459e2, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 2104388746}
     - target: {fileID: 2663663662728573844, guid: fa0855990489eca4ba5af227de1459e2, type: 3}
       propertyPath: m_Name
       value: GameManager

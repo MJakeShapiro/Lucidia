@@ -24,39 +24,37 @@ public class Player : MonoBehaviour
 
     // Takes players input
     private InputMaster controls;
-
     // Holds player input
     private Vector2 moveDirection;
-
-    public GameObject dashEffect;
-
     // Holds player position
     private Rigidbody2D rb;
     [SerializeField] public Transform feetPos;
 
+    [SerializeField] private float moveSpeed = 6.0f;
 
-    [Space]
-    [SerializeField] private float moveSpeed = 5.0f, jumpForce = 17.0f;
+    [Header("Jump")]
+    [SerializeField] private float jumpForce = 20.0f;
     [Tooltip("Minimum jump time in seconds")] [SerializeField] private float MIN_JUMP_COUNTER = 0.17f;
     private float jumpCounter = 0;
 
-    [Space]
+    [Header("Dash")]
+    [SerializeField] private GameObject dashEffect;
     [SerializeField] private float dashSpeed = 50.0f;
     [SerializeField] public float TOTAL_DASH_TIME = 0.1f;
+    [SerializeField] private float MIN_DASH_COOLDOWN = 0.5f;
+    [HideInInspector] public bool isDashing = false, hasAirDashed = false;
     private float dashTime;
-
-    [SerializeField] private float MIN_DASH_COOLDOWN = 1;
-    private float dashCooldown;
-    private bool canDash;
+    private float dashCooldown = 0.0f;
+    private bool canDash = true;
 
     //Movement States
-    private bool isJumping = false;
+    private Vector2 airVelocity = Vector2.zero;
+    [HideInInspector] public bool isJumping = false;
     private bool cancelJumpingQueue = false;
-    private bool isDashing = false, hasAirDashed = false;
-    private Direction direction;
+    private Direction direction = Direction.right;
 
-    [Space]
-    [Tooltip("allows player to cancel jump early")] [SerializeField] private bool variableJump = true;
+    [Header("Playtest bools")]
+    [Tooltip("allows player to cancel jump early")] [SerializeField] private bool variableJump = false;
     [SerializeField] private bool startWithDash = false, diagonalDash = false;
 
 
@@ -166,7 +164,23 @@ public class Player : MonoBehaviour
         
         if (!isDashing)
         {
-            rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+            if (!GameManager.Instance.IsGrounded(feetPos))
+            {
+                if (moveDirection.x != 0)
+                {
+                    rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+                    airVelocity = rb.velocity;
+                }
+                else
+                {
+                    rb.velocity = new Vector2(airVelocity.x, rb.velocity.y);
+                }
+            }
+            else
+            {
+                airVelocity = Vector2.zero;
+                rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+            }
         }
     }
 
@@ -228,7 +242,11 @@ public class Player : MonoBehaviour
                 hasAirDashed = true;
 
             isDashing = true;
+            dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
+
+            GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
+            Destroy(DashEffectToDestroy, 0.15f);
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
@@ -263,7 +281,6 @@ public class Player : MonoBehaviour
         {
             if (dashTime <= 0.0f)
             {
-                dashTime = TOTAL_DASH_TIME;
                 rb.velocity = Vector2.zero;
                 rb.gravityScale = 4.0f;
                 isDashing = false;
@@ -275,7 +292,6 @@ public class Player : MonoBehaviour
                 dashTime -= Time.deltaTime;
             }
         }
-
         if (!canDash)
             dashCooldown -= Time.deltaTime;
         if (dashCooldown <= 0.0f)
@@ -285,7 +301,7 @@ public class Player : MonoBehaviour
                 canDash = true;
                 hasAirDashed = false;
             }
-            
+
         }
     }
 
@@ -300,8 +316,4 @@ public class Player : MonoBehaviour
     #endregion Dash
 
     #endregion Abilities
-
-
-
-
 }
