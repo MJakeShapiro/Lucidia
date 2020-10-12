@@ -4,30 +4,17 @@ using UnityEngine;
 
 public class Sword_Pickup : MonoBehaviour
 {
+    public Player player_script;
     // Start is called before the first frame update
-    public Collider2D sword;
-    
-    void Start()
+    private void OnTriggerEnter2D(Collider2D test)
     {
-        
-    }
+        player_script.GetSword = true;
+        OnDestroy();
+            Debug.Log("sword taken");
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        sword.isTrigger = false;
-        if (sword == true)
-            OnTriggerEnter2D(sword);
-        else
-            OnTriggerExit2D(sword);
-            
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnDestroy()
     {
-            Debug.Log("Sword is picked up");
-    }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log("Sword is picked down");
+        Destroy(gameObject);
     }
 }

@@ -8,9 +8,11 @@ public class Player : MonoBehaviour
 {
     #region Properties
 
-    //Animator for the player
+    //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
+    public bool GetSword;
+    public GameObject sword_sprite;
 
     // Takes players input
     private InputMaster controls;
@@ -55,6 +57,10 @@ public class Player : MonoBehaviour
     #region Initialization
     private void Awake()
     {
+        //GetSword bool to start without sword
+        GetSword = false;
+        sword_sprite.SetActive(false);
+
         rb = GetComponent<Rigidbody2D>();
 
         controls = new InputMaster();
@@ -90,6 +96,11 @@ public class Player : MonoBehaviour
         if (variableJump)
             JumpQueue();
         DashCounter();
+
+        if (GetSword == true)
+        {
+            sword_sprite.SetActive(true);
+        }
 
     }
 
