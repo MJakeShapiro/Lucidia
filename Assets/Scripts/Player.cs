@@ -185,6 +185,19 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Adds boost to player after entering Rift
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "ShadowRift" && isDashing)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce * 6);
+            Debug.Log("Player Triggered");
+        }
+        Debug.Log("Player Not Triggered");
+    }
     #endregion Movement
 
     #region Abilities
