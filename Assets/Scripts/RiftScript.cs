@@ -24,6 +24,7 @@ public class RiftScript : MonoBehaviour
         Player myPlayer = other.GetComponent<Player>();
         if (myPlayer.isDashing == true)
         {
+            AudioManager.instance.PlaySound("rift-dash");
             areaEffector.forceMagnitude = 500;
             Debug.Log("Rift Triggered");
         }
