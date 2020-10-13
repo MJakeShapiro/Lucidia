@@ -152,7 +152,7 @@ public class Player : MonoBehaviour
     {
         if (GameManager.Instance.IsGrounded(feetPos))
         {
-            AudioManager.instance.PlaySound("jump");
+            //AudioManager.instance.PlaySound("jump-ploing");
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpCounter = MIN_JUMP_COUNTER;
