@@ -140,19 +140,11 @@ public class Player : MonoBehaviour
         if (moveDirection.x > 0.0f)
         {
             direction = Direction.right;
-            //if (m_FacingRight == false)
-            //{
-            //    Flip();
-            //}
             animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.x < 0.0f)
         {
             direction = Direction.left;
-            //if(m_FacingRight == true)
-            //{
-            //    Flip();
-            //}
             animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.y > 0.0f)
@@ -177,7 +169,6 @@ public class Player : MonoBehaviour
     {
         if (!isDashing && !isRecoiling)
         {  
-            //Flip();
             animator.SetBool("IsDashing", false);
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
