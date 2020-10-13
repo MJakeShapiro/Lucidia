@@ -33,6 +33,14 @@ public class Player : MonoBehaviour
     private float dashCooldown = 0.0f;
     private bool canDash = true;
 
+    [Header("Attack")]
+    [SerializeField] private Transform attackPos;
+    [SerializeField] private LayerMask enemies;
+    [SerializeField] private float TOTAL_ATTACK_TIME;
+    private float attackTime;
+    
+    public bool isAttacking = false;
+
     //Movement States
     private Vector2 airVelocity = Vector2.zero;
     [HideInInspector] public bool isJumping = false;
