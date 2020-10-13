@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -6,14 +7,28 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    #region Art/Animation
+
+
+    //Animator/Art variables for the player
+    public Animator animator;
+    private bool m_FacingRight = true;
+    public bool GetSword;
+    public GameObject sword_sprite;
+
+
+    #endregion Art/Animation
+
     #region Properties
 
+
+
     // Takes players input
-    private InputMaster controls;
+    public InputMaster controls;
     // Holds player input
     private Vector2 moveDirection;
     // Holds player position
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     [SerializeField] public Transform feetPos;
 
     [SerializeField] private float moveSpeed = 6.0f;
@@ -31,13 +46,22 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isDashing = false, hasAirDashed = false;
     private float dashTime;
     private float dashCooldown = 0.0f;
-    private bool canDash = true;
+    [HideInInspector] public bool canDash = true;
+
+    //[Header("Attack")]
+    //[SerializeField] private Transform attackPos;
+    //[SerializeField] private LayerMask enemies;
+    //[SerializeField] private float TOTAL_ATTACK_TIME;
+    //private float attackTime;
+    
+    //public bool isAttacking = false;
 
     //Movement States
-    private Vector2 airVelocity = Vector2.zero;
+    [HideInInspector] public Vector2 airVelocity = Vector2.zero;
     [HideInInspector] public bool isJumping = false;
     private bool cancelJumpingQueue = false;
     private Direction direction = Direction.right;
+    private State state = State.idle;
 
     [Header("Playtest bools")]
     [Tooltip("allows player to cancel jump early")] [SerializeField] private bool variableJump = false;
@@ -49,6 +73,10 @@ public class Player : MonoBehaviour
     #region Initialization
     private void Awake()
     {
+        //GetSword bool to start without sword
+        GetSword = false;
+        sword_sprite.SetActive(false);
+
         rb = GetComponent<Rigidbody2D>();
 
         controls = new InputMaster();
@@ -56,7 +84,9 @@ public class Player : MonoBehaviour
         controls.Player.Jump.performed += _ => Jump();
         if (variableJump)
             controls.Player.Jump.canceled += _ => CancelJump();
+
         controls.Player.Dash.performed += _ => Dash();
+        controls.Player.Attack.performed += _ => SwordBoop();
 
 
     }
@@ -67,6 +97,7 @@ public class Player : MonoBehaviour
         controls.Player.Jump.Enable();
         if (startWithDash)
             controls.Player.Dash.Enable();
+        controls.Player.Attack.Enable();
     }
 
     private void OnDisable()
@@ -84,6 +115,12 @@ public class Player : MonoBehaviour
         if (variableJump)
             JumpQueue();
         DashCounter();
+        SwordBoopCounter();
+
+        if (GetSword == true)
+        {
+            sword_sprite.SetActive(true);
+        }
     }
 
     private void FixedUpdate()
@@ -103,10 +140,12 @@ public class Player : MonoBehaviour
         if (moveDirection.x > 0.0f)
         {
             direction = Direction.right;
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.x < 0.0f)
         {
             direction = Direction.left;
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.y > 0.0f)
         {
@@ -116,6 +155,11 @@ public class Player : MonoBehaviour
         {
             direction = Direction.down;
         }
+        else
+        {
+            animator.SetBool("IsRunning", false);
+        }
+        Flip();
     }
 
     /// <summary>
@@ -123,8 +167,9 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Movement()
     {
-        if (!isDashing)
-        {
+        if (!isDashing && !isRecoiling)
+        {  
+            animator.SetBool("IsDashing", false);
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
                 if (moveDirection.x != 0)
@@ -142,14 +187,17 @@ public class Player : MonoBehaviour
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
             }
+            
         }
-    }
+           
+        }
 
     /// <summary>
     /// Jumps Player and sets counter for Variable Jump
     /// </summary>
     private void Jump()
     {
+        //animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             AudioManager.instance.PlaySound("jump");
@@ -162,8 +210,9 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Sets cancelJumpQueue to stop jump after minimum jump has been reached
     /// </summary>
-    private void CancelJump()
+    public void CancelJump()
     {
+        //animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
@@ -186,6 +235,45 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+
+    public void Flip()
+    {
+        Vector2 localScale = transform.localScale;
+        if ((direction == Direction.left && localScale.x > 0) || (direction == Direction.right && localScale.x < 0))
+        {
+            localScale.x *= -1;
+            transform.localScale = localScale;
+        }
+    }
+
+    /// <summary>
+    /// Adds boost to player after entering Rift
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "ShadowRift" && isDashing)
+        {
+            if(direction == Direction.right)
+            {
+                rb.velocity = Vector2.right * dashSpeed * 3;
+                Debug.Log("Player Triggered");
+            }
+            if(direction == Direction.left)
+            {
+                rb.velocity = Vector2.left * dashSpeed * 3;
+            }
+            else if (direction == Direction.up)
+            {
+                rb.velocity = Vector2.up * dashSpeed * 3;
+            }
+            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
+            {
+                rb.velocity = Vector2.down * dashSpeed * 3;
+            }
+        }
+        Debug.Log("Player Not Triggered");
+    }
     #endregion Movement
 
     #region Abilities
@@ -194,10 +282,11 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Dashes player according to dashSpeed. DiagonalDash option.
     /// </summary>
-    private void Dash()
+    public void Dash()
     {
         if (canDash)
         {
+            animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
@@ -208,7 +297,8 @@ public class Player : MonoBehaviour
             rb.gravityScale = 0.0f;
 
             GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
-            Destroy(DashEffectToDestroy, 0.15f);
+
+            Destroy(DashEffectToDestroy, 0.2f);
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
@@ -216,6 +306,7 @@ public class Player : MonoBehaviour
                 if (direction == Direction.right)
                 {
                     rb.velocity = Vector2.right * dashSpeed;
+                    
                 }
                 else if (direction == Direction.left)
                 {
@@ -265,7 +356,121 @@ public class Player : MonoBehaviour
 
         }
     }
+    public void CancelDash()
+    {
+        dashTime = 0.0f;
+    }
+
+    //private void Flip()
+    //{
+    //    m_FacingRight = !m_FacingRight;
+
+    //    Vector3 theScale = transform.localScale;
+    //    theScale.x *= -1;
+    //    transform.localScale = theScale;
+    //}
     #endregion Dash
+
+    #region Sword Attack
+
+    [Header("Attack")]
+    [SerializeField] private Transform horizontalAttackPos, upAttackPos, downAttackPos;
+    [SerializeField] private LayerMask enemies;
+    [SerializeField] private float horizontalAttackRangeX, horizontalAttackRangeY;
+    [SerializeField] private float verticalAttackRangeX, verticalAttackRangeY;
+    [SerializeField] private float TOTAL_ATTACK_TIME;
+    [SerializeField] private float attackHorRecoil, RECOIL_DURATION;
+    private float recoilTime;
+    RecoilDir recoilDir;
+    private bool isRecoiling;
+    private float attackTime;
+
+    public bool isAttacking = false;
+    private void SwordBoop()
+    {
+        if(attackTime <= 0)
+        {
+            isAttacking = true;
+            attackTime = TOTAL_ATTACK_TIME;
+            Collider2D[] enemiesHit;
+            if (direction == Direction.up)
+            {
+                enemiesHit = Physics2D.OverlapBoxAll(upAttackPos.position, new Vector2(verticalAttackRangeX, verticalAttackRangeY), 0.0f, enemies);
+            }
+            if (direction == Direction.down && GameManager.Instance.IsGrounded(feetPos))
+                return;
+            else if (direction == Direction.down)
+            {
+                enemiesHit = Physics2D.OverlapBoxAll(downAttackPos.position, new Vector2(verticalAttackRangeX, verticalAttackRangeY), 0.0f, enemies);
+            }
+            else
+                enemiesHit = Physics2D.OverlapBoxAll(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies);
+
+
+            for (int i = 0; i < enemiesHit.Length; i++)
+            {
+                // Damage enemies here
+                Debug.Log("SMHMACK");
+            }
+
+            //Apply knockback(TODO)
+            if (Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies) || Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, GameManager.Instance.ground))
+            {
+                recoilTime = RECOIL_DURATION;
+                isRecoiling = true;
+                if (direction == Direction.left)
+                    recoilDir = RecoilDir.right;
+                if (direction == Direction.right)
+                    recoilDir = RecoilDir.left;
+            }
+        }
+    }
+
+    private void SwordBoopCounter()
+    {
+        if (isAttacking)
+        {
+            if (attackTime > 0)
+            {
+                attackTime -= Time.deltaTime;
+            }
+            else
+            {
+                isAttacking = false;
+            }
+        }
+        if (isRecoiling)
+        {
+            if (recoilTime > 0)
+            {
+                if (recoilDir == RecoilDir.left)
+                    rb.velocity = (double)rb.velocity.x <= -(double)attackHorRecoil ? new Vector2(rb.velocity.x - attackHorRecoil, rb.velocity.y) : new Vector2(-attackHorRecoil, rb.velocity.y);
+                if (recoilDir == RecoilDir.right)
+                    rb.velocity = (double)rb.velocity.x >= (double)attackHorRecoil ? new Vector2(rb.velocity.x + attackHorRecoil, rb.velocity.y) : new Vector2(attackHorRecoil, rb.velocity.y);
+
+                recoilTime -= Time.deltaTime;
+            }
+            else
+            {
+                isRecoiling = false;
+            }
+        }
+    }
+
+    // ONLY FOR DEBUGGING AND TESTING
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(upAttackPos.position, new Vector3(verticalAttackRangeX, verticalAttackRangeY, 0.0f));
+
+        Gizmos.DrawWireCube(downAttackPos.position, new Vector3(verticalAttackRangeX, verticalAttackRangeY, 0.0f));
+
+        Gizmos.DrawWireCube(horizontalAttackPos.position, new Vector3(horizontalAttackRangeX, horizontalAttackRangeY, 0.0f));
+
+
+    }
+
+    #endregion Sword Attack
 
     #endregion Abilities
 }
