@@ -17,7 +17,6 @@ public class RiftScript : MonoBehaviour
     void Update()
     {
         areaEffector.forceMagnitude = 0;
-        areaEffector.forceVariation = 0;
     }
     
     void OnTriggerEnter2D(Collider2D other)
@@ -25,8 +24,7 @@ public class RiftScript : MonoBehaviour
         Player myPlayer = other.GetComponent<Player>();
         if (myPlayer.isDashing == true)
         {
-            areaEffector.forceMagnitude = 400;
-            areaEffector.forceVariation = 100;
+            areaEffector.forceMagnitude = 500;
             Debug.Log("Rift Triggered");
         }
 
