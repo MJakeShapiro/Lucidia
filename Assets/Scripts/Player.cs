@@ -341,12 +341,20 @@ public class Player : MonoBehaviour
             if (Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies) || Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, GameManager.Instance.ground))
             {
                 if (direction == Direction.right)
-                {
-                    isRecoiling = true;
-                    recoilDir = RecoilDir.left;
-                    recoilTime = RECOIL_DURATION;
+            {
+                isRecoiling = true;
+                recoilDir = RecoilDir.left;
+                recoilTime = RECOIL_DURATION;
+                rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
+            }
+                if (direction == Direction.down)
+                    rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
+                if (direction == Direction.up)
+                    rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
+                if (direction == Direction.left)
+                    rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
+                if (direction == Direction.right)
                     rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
-                }
             }
         }
     }
@@ -369,11 +377,17 @@ public class Player : MonoBehaviour
             if (recoilTime > 0)
             {
                 if (recoilDir == RecoilDir.left)
-                {
                     rb.velocity = (double)rb.velocity.x <= -(double)attackHorRecoil ? new Vector2(rb.velocity.x - attackHorRecoil, rb.velocity.y) : new Vector2(-attackHorRecoil, rb.velocity.y);
-                    Debug.Log(rb.velocity);
-                    recoilTime -= Time.deltaTime;
-                }
+                if (recoilDir == RecoilDir.down)
+                    rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
+                if (recoilDir == RecoilDir.up)
+                    rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
+                if (recoilDir == RecoilDir.left)
+                    rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
+                if (recoilDir == RecoilDir.right)
+                    rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
+
+                recoilTime -= Time.deltaTime;
             }
             else
             {
