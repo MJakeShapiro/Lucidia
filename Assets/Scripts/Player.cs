@@ -193,8 +193,23 @@ public class Player : MonoBehaviour
     {
         if(other.tag == "ShadowRift" && isDashing)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce * 6);
-            Debug.Log("Player Triggered");
+            if(direction == Direction.right)
+            {
+                rb.velocity = Vector2.right * dashSpeed * 3;
+                Debug.Log("Player Triggered");
+            }
+            if(direction == Direction.left)
+            {
+                rb.velocity = Vector2.left * dashSpeed * 3;
+            }
+            else if (direction == Direction.up)
+            {
+                rb.velocity = Vector2.up * dashSpeed * 3;
+            }
+            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
+            {
+                rb.velocity = Vector2.down * dashSpeed * 3;
+            }
         }
         Debug.Log("Player Not Triggered");
     }
