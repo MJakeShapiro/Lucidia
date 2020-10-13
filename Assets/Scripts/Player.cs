@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
         
         if (!isDashing)
         {
-            animator.SetBool("IsDashing", false);
+            
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
                 if (moveDirection.x != 0)
@@ -238,9 +238,11 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Dash()
     {
+        //animator.SetBool("IsDashing", false);
+
         if (canDash)
         {
-            animator.SetBool("IsDashing", true);
+            //animator.SetBool("IsDashing", true);
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
