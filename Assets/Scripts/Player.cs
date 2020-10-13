@@ -165,6 +165,7 @@ public class Player : MonoBehaviour
     {
         if (GameManager.Instance.IsGrounded(feetPos))
         {
+            AudioManager.instance.PlaySound("jump");
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpCounter = MIN_JUMP_COUNTER;
@@ -210,6 +211,8 @@ public class Player : MonoBehaviour
     {
         if (canDash)
         {
+            AudioManager.instance.PlaySound("dash2");
+
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
