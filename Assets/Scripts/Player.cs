@@ -165,6 +165,7 @@ public class Player : MonoBehaviour
         
         if (!isDashing)
         {
+            animator.SetBool("IsDashing", false);
             
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
@@ -193,6 +194,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump()
     {
+        animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             isJumping = true;
@@ -206,6 +208,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CancelJump()
     {
+        animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
@@ -238,11 +241,8 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Dash()
     {
-        //animator.SetBool("IsDashing", false);
-
         if (canDash)
         {
-            //animator.SetBool("IsDashing", true);
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
@@ -260,19 +260,22 @@ public class Player : MonoBehaviour
                 if (direction == Direction.right)
                 {
                     rb.velocity = Vector2.right * dashSpeed;
-                    
+                    animator.SetBool("IsDashing", true);
                 }
                 else if (direction == Direction.left)
                 {
                     rb.velocity = Vector2.left * dashSpeed;
+                    animator.SetBool("IsDashing", true);
                 }
                 else if (direction == Direction.up)
                 {
                     rb.velocity = Vector2.up * dashSpeed;
+                    animator.SetBool("IsDashing", true);
                 }
                 else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
                 {
                     rb.velocity = Vector2.down * dashSpeed;
+                    animator.SetBool("IsDashing", true);
                 }
             }
         }
