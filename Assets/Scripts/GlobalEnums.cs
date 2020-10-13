@@ -1,4 +1,4 @@
-﻿enum Direction
+﻿public enum Direction
 {
     up,
     down,
@@ -6,7 +6,7 @@
     right
 }
 
-enum State
+public enum State
 {
     idle,
     running,

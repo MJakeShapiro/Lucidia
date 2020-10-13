@@ -124,6 +124,7 @@ public class Player : MonoBehaviour
         else if (moveDirection.y > 0.0f)
         {
             direction = Direction.up;
+
         }
         else if (moveDirection.y < 0.0f)
         {
@@ -138,6 +139,8 @@ public class Player : MonoBehaviour
     {
         if (!isDashing)
         {
+            
+            Flip();
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
                 if (moveDirection.x != 0)
@@ -155,6 +158,7 @@ public class Player : MonoBehaviour
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
             }
+            Debug.Log("rb.velocity Movement: " + rb.velocity);
         }
     }
 
@@ -175,7 +179,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Sets cancelJumpQueue to stop jump after minimum jump has been reached
     /// </summary>
-    private void CancelJump()
+    public void CancelJump()
     {
         isJumping = false;
         cancelJumpingQueue = true;
@@ -199,6 +203,16 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    public void Flip()
+    {
+        Vector2 localScale = transform.localScale;
+        if ((direction == Direction.left && localScale.x > 0) || (direction == Direction.right && localScale.x < 0))
+        {
+            localScale.x *= -1;
+            transform.localScale = localScale;
+        }
+    }
     #endregion Movement
 
     #region Abilities
@@ -207,7 +221,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Dashes player according to dashSpeed. DiagonalDash option.
     /// </summary>
-    private void Dash()
+    public void Dash()
     {
         if (canDash)
         {
@@ -278,16 +292,22 @@ public class Player : MonoBehaviour
 
         }
     }
+
+    public void CancelDash()
+    {
+        dashTime = 0.0f;
+    }
     #endregion Dash
 
     #region Sword Attack
 
     [Header("Attack")]
-    [SerializeField] private Transform attackPos;
+    [SerializeField] private Transform horizontalAttackPos, upAttackPos, downAttackPos;
     [SerializeField] private LayerMask enemies;
-    [SerializeField] private float attackRange;
+    [SerializeField] private float horizontalAttackRangeX, horizontalAttackRangeY;
+    [SerializeField] private float verticalAttackRangeX, verticalAttackRangeY;
     [SerializeField] private float TOTAL_ATTACK_TIME;
-    [SerializeField] private float attackKnockback;
+    [SerializeField] private float attackHorRecoil;
     private float attackTime;
 
     public bool isAttacking = false;
@@ -297,25 +317,56 @@ public class Player : MonoBehaviour
         {
             isAttacking = true;
             attackTime = TOTAL_ATTACK_TIME;
-            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemies);
+            Collider2D[] enemiesHit;
+            if (direction == Direction.up)
+            {
+                enemiesHit = Physics2D.OverlapBoxAll(upAttackPos.position, new Vector2(verticalAttackRangeX, verticalAttackRangeY), 0.0f, enemies);
+            }
+            else if(direction == Direction.down)
+            {
+                enemiesHit = Physics2D.OverlapBoxAll(downAttackPos.position, new Vector2(verticalAttackRangeX, verticalAttackRangeY), 0.0f, enemies);
+            }
+            else
+                enemiesHit = Physics2D.OverlapBoxAll(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX,horizontalAttackRangeY), 0.0f, enemies);
 
-            for(int i = 0; i < enemiesHit.Length; i++)
+
+            for (int i = 0; i < enemiesHit.Length; i++)
             {
                 // Damage enemies here
                 Debug.Log("SMHMACK");
             }
+            //if (direction == Direction.down)
+            //    rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
+            //if (direction == Direction.up)
+            //    rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
+            if (direction == Direction.left)
+            {
+                Debug.Log("rb.velocity before: " + rb.velocity);
 
-            ////Apply knockback (TODO)
+                rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
+
+                Debug.Log("rb.velocity after: " + rb.velocity);
+            }
+
+            if (direction == Direction.right)
+            {
+                Debug.Log("rb.velocity before: " + rb.velocity);
+                rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
+                Debug.Log("rb.velocity after: " + rb.velocity);
+            }
+                
+
+            //Apply knockback (TODO)
             //if (Physics2D.OverlapCircle(attackPos.position, attackRange, enemies))
             //{
             //    if (direction == Direction.down)
-            //        rb.velocity = new Vector2(rb.velocity.x, attackKnockback);
+            //        rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
             //    if (direction == Direction.up)
-            //        rb.velocity = new Vector2(rb.velocity.x, -attackKnockback);
+            //        rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
             //    if (direction == Direction.left)
-            //        rb.velocity = new Vector2(attackKnockback, rb.velocity.y);
+            //        rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
             //    if (direction == Direction.right)
-            //        rb.velocity = new Vector2(-attackKnockback, rb.velocity.y);
+            //        rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
             //}
         }
     }
@@ -339,7 +390,13 @@ public class Player : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+        Gizmos.DrawWireCube(upAttackPos.position, new Vector3(verticalAttackRangeX, verticalAttackRangeY, 0.0f));
+
+        Gizmos.DrawWireCube(downAttackPos.position, new Vector3(verticalAttackRangeX, verticalAttackRangeY, 0.0f));
+
+        Gizmos.DrawWireCube(horizontalAttackPos.position, new Vector3(horizontalAttackRangeX, horizontalAttackRangeY, 0.0f));
+
+
     }
 
     #endregion Sword Attack
