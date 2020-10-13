@@ -92,4 +92,60 @@ MonoBehaviour:
     pitMULT: 0
     loop: 0
     isMusic: 0
+  - name: walk-rustle
+    clip: {fileID: 8300000, guid: 19a520920f356b940bf2a713d4b3b042, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: land
+    clip: {fileID: 8300000, guid: a4fef10a09096254885a46bd6bce144f, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: land-pat
+    clip: {fileID: 8300000, guid: d6ad49adcacecfa478b5e9db87b5fdfb, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: rift-dash
+    clip: {fileID: 8300000, guid: 6cdef8d4615d99b42ba61525df3caaee, type: 3}
+    volume: 0.1
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: jump-bloop
+    clip: {fileID: 8300000, guid: adc2ffccfeaf9f849af34630cfd5f5f8, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: jump-ploing
+    clip: {fileID: 8300000, guid: 198a1ea4dea903f4cae9fe3c982d3d86, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 0
+    isMusic: 0
+  - name: sad piano
+    clip: {fileID: 8300000, guid: 44616d4113cd4dc4ca212b96a2de3cfd, type: 3}
+    volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 1
+    isMusic: 1
   music_selection: 0
