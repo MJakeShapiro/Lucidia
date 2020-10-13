@@ -5,3 +5,12 @@
     left,
     right
 }
+
+enum State
+{
+    idle,
+    running,
+    jumping,
+    dashing,
+    attacking
+}

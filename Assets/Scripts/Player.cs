@@ -9,11 +9,11 @@ public class Player : MonoBehaviour
     #region Properties
 
     // Takes players input
-    private InputMaster controls;
+    public InputMaster controls;
     // Holds player input
     private Vector2 moveDirection;
     // Holds player position
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     [SerializeField] public Transform feetPos;
 
     [SerializeField] private float moveSpeed = 6.0f;
@@ -31,21 +31,22 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isDashing = false, hasAirDashed = false;
     private float dashTime;
     private float dashCooldown = 0.0f;
-    private bool canDash = true;
+    [HideInInspector] public bool canDash = true;
 
-    [Header("Attack")]
-    [SerializeField] private Transform attackPos;
-    [SerializeField] private LayerMask enemies;
-    [SerializeField] private float TOTAL_ATTACK_TIME;
-    private float attackTime;
+    //[Header("Attack")]
+    //[SerializeField] private Transform attackPos;
+    //[SerializeField] private LayerMask enemies;
+    //[SerializeField] private float TOTAL_ATTACK_TIME;
+    //private float attackTime;
     
-    public bool isAttacking = false;
+    //public bool isAttacking = false;
 
     //Movement States
-    private Vector2 airVelocity = Vector2.zero;
+    [HideInInspector] public Vector2 airVelocity = Vector2.zero;
     [HideInInspector] public bool isJumping = false;
     private bool cancelJumpingQueue = false;
     private Direction direction = Direction.right;
+    private State state = State.idle;
 
     [Header("Playtest bools")]
     [Tooltip("allows player to cancel jump early")] [SerializeField] private bool variableJump = false;
@@ -213,7 +214,7 @@ public class Player : MonoBehaviour
             rb.gravityScale = 0.0f;
 
             GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
-            Destroy(DashEffectToDestroy, 0.15f);
+            Destroy(DashEffectToDestroy, 0.2f);
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
@@ -273,10 +274,30 @@ public class Player : MonoBehaviour
     #endregion Dash
 
     #region Sword Attack
+
+    [Header("Attack")]
+    [SerializeField] private Transform attackPos;
+    [SerializeField] private LayerMask enemies;
+    [SerializeField] private float attackRange;
+    [SerializeField] private float TOTAL_ATTACK_TIME;
+    private float attackTime;
+
+    public bool isAttacking = false;
     private void SwordBoop()
+    {
+        if(attackTime <= 0)
+        {
+            isAttacking = true;
+            attackTime = TOTAL_ATTACK_TIME;
+            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemies);
+        }
+    }
+
+    private void SwordBoopCooldown()
     {
 
     }
+
     #endregion Sword Attack
 
     #endregion Abilities
