@@ -21,8 +21,6 @@ public class Player : MonoBehaviour
 
     #region Properties
 
-
-
     // Takes players input
     public InputMaster controls;
     // Holds player input
@@ -105,6 +103,7 @@ public class Player : MonoBehaviour
         controls.Player.Movement.Disable();
         controls.Player.Jump.Disable();
         controls.Player.Dash.Disable();
+        controls.Player.Attack.Disable();
     }
 
     #endregion Initialization
@@ -112,6 +111,7 @@ public class Player : MonoBehaviour
     #region Update Methods
     private void Update()
     {
+        DeathCheck();
         if (variableJump)
             JumpQueue();
         DashCounter();
@@ -186,11 +186,9 @@ public class Player : MonoBehaviour
             {
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
-            }
-            
-        }
-           
-        }
+            } 
+        }   
+    }
 
     /// <summary>
     /// Jumps Player and sets counter for Variable Jump
@@ -236,7 +234,9 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Checks if players needs to be flipped and flips based on direction
+    /// </summary>
     public void Flip()
     {
         Vector2 localScale = transform.localScale;
@@ -361,14 +361,6 @@ public class Player : MonoBehaviour
         dashTime = 0.0f;
     }
 
-    //private void Flip()
-    //{
-    //    m_FacingRight = !m_FacingRight;
-
-    //    Vector3 theScale = transform.localScale;
-    //    theScale.x *= -1;
-    //    transform.localScale = theScale;
-    //}
     #endregion Dash
 
     #region Sword Attack
@@ -473,4 +465,22 @@ public class Player : MonoBehaviour
     #endregion Sword Attack
 
     #endregion Abilities
+
+    #region Death
+    private void DeathCheck()
+    {
+        if (rb.IsTouchingLayers(enemies))
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        Time.timeScale = 0;
+        OnDisable();
+    }
+
+    #endregion Death
+
 }
