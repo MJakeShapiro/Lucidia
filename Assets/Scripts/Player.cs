@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
         controls.Player.Jump.performed += _ => Jump();
         if (variableJump)
             controls.Player.Jump.canceled += _ => CancelJump();
+
         controls.Player.Dash.performed += _ => Dash();
 
 
@@ -164,6 +165,7 @@ public class Player : MonoBehaviour
         
         if (!isDashing)
         {
+            
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
                 if (moveDirection.x != 0)
@@ -181,8 +183,10 @@ public class Player : MonoBehaviour
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
             }
+            
         }
-    }
+           
+        }
 
     /// <summary>
     /// Jumps Player and sets counter for Variable Jump
@@ -234,10 +238,11 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Dash()
     {
-        animator.SetBool("IsDashing", false);
+        //animator.SetBool("IsDashing", false);
+
         if (canDash)
         {
-            animator.SetBool("IsDashing", true);
+            //animator.SetBool("IsDashing", true);
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
@@ -247,6 +252,7 @@ public class Player : MonoBehaviour
 
             GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
             Destroy(DashEffectToDestroy, 0.15f);
+
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else
@@ -254,6 +260,7 @@ public class Player : MonoBehaviour
                 if (direction == Direction.right)
                 {
                     rb.velocity = Vector2.right * dashSpeed;
+                    
                 }
                 else if (direction == Direction.left)
                 {
@@ -267,7 +274,6 @@ public class Player : MonoBehaviour
                 {
                     rb.velocity = Vector2.down * dashSpeed;
                 }
-
             }
         }
     }
