@@ -7,7 +7,21 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    #region Art/Animation
+
+
+    //Animator/Art variables for the player
+    public Animator animator;
+    private bool m_FacingRight = true;
+    public bool GetSword;
+    public GameObject sword_sprite;
+
+
+    #endregion Art/Animation
+
     #region Properties
+
+
 
     // Takes players input
     public InputMaster controls;
@@ -59,6 +73,10 @@ public class Player : MonoBehaviour
     #region Initialization
     private void Awake()
     {
+        //GetSword bool to start without sword
+        GetSword = false;
+        sword_sprite.SetActive(false);
+
         rb = GetComponent<Rigidbody2D>();
 
         controls = new InputMaster();
@@ -66,6 +84,7 @@ public class Player : MonoBehaviour
         controls.Player.Jump.performed += _ => Jump();
         if (variableJump)
             controls.Player.Jump.canceled += _ => CancelJump();
+
         controls.Player.Dash.performed += _ => Dash();
         controls.Player.Attack.performed += _ => SwordBoop();
 
@@ -97,6 +116,11 @@ public class Player : MonoBehaviour
             JumpQueue();
         DashCounter();
         SwordBoopCounter();
+
+        if (GetSword == true)
+        {
+            sword_sprite.SetActive(true);
+        }
     }
 
     private void FixedUpdate()
@@ -116,20 +140,34 @@ public class Player : MonoBehaviour
         if (moveDirection.x > 0.0f)
         {
             direction = Direction.right;
+            //if (m_FacingRight == false)
+            //{
+            //    Flip();
+            //}
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.x < 0.0f)
         {
             direction = Direction.left;
+            //if(m_FacingRight == true)
+            //{
+            //    Flip();
+            //}
+            animator.SetBool("IsRunning", true);
         }
         else if (moveDirection.y > 0.0f)
         {
             direction = Direction.up;
-
         }
         else if (moveDirection.y < 0.0f)
         {
             direction = Direction.down;
         }
+        else
+        {
+            animator.SetBool("IsRunning", false);
+        }
+        Flip();
     }
 
     /// <summary>
@@ -139,7 +177,8 @@ public class Player : MonoBehaviour
     {
         if (!isDashing && !isRecoiling)
         {  
-            Flip();
+            //Flip();
+            animator.SetBool("IsDashing", false);
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
                 if (moveDirection.x != 0)
@@ -157,14 +196,17 @@ public class Player : MonoBehaviour
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
             }
+            
         }
-    }
+           
+        }
 
     /// <summary>
     /// Jumps Player and sets counter for Variable Jump
     /// </summary>
     private void Jump()
     {
+        //animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             AudioManager.instance.PlaySound("jump");
@@ -179,6 +221,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CancelJump()
     {
+        //animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
@@ -202,6 +245,7 @@ public class Player : MonoBehaviour
         }
     }
 
+
     public void Flip()
     {
         Vector2 localScale = transform.localScale;
@@ -210,6 +254,34 @@ public class Player : MonoBehaviour
             localScale.x *= -1;
             transform.localScale = localScale;
         }
+    }
+
+    /// <summary>
+    /// Adds boost to player after entering Rift
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "ShadowRift" && isDashing)
+        {
+            if(direction == Direction.right)
+            {
+                rb.velocity = Vector2.right * dashSpeed * 3;
+                Debug.Log("Player Triggered");
+            }
+            if(direction == Direction.left)
+            {
+                rb.velocity = Vector2.left * dashSpeed * 3;
+            }
+            else if (direction == Direction.up)
+            {
+                rb.velocity = Vector2.up * dashSpeed * 3;
+            }
+            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
+            {
+                rb.velocity = Vector2.down * dashSpeed * 3;
+            }
+        }
+        Debug.Log("Player Not Triggered");
     }
     #endregion Movement
 
@@ -223,6 +295,7 @@ public class Player : MonoBehaviour
     {
         if (canDash)
         {
+            animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
@@ -233,6 +306,7 @@ public class Player : MonoBehaviour
             rb.gravityScale = 0.0f;
 
             GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
+
             Destroy(DashEffectToDestroy, 0.2f);
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
@@ -241,6 +315,7 @@ public class Player : MonoBehaviour
                 if (direction == Direction.right)
                 {
                     rb.velocity = Vector2.right * dashSpeed;
+                    
                 }
                 else if (direction == Direction.left)
                 {
@@ -290,11 +365,19 @@ public class Player : MonoBehaviour
 
         }
     }
-
     public void CancelDash()
     {
         dashTime = 0.0f;
     }
+
+    //private void Flip()
+    //{
+    //    m_FacingRight = !m_FacingRight;
+
+    //    Vector3 theScale = transform.localScale;
+    //    theScale.x *= -1;
+    //    transform.localScale = theScale;
+    //}
     #endregion Dash
 
     #region Sword Attack
