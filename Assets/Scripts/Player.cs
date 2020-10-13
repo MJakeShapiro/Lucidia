@@ -137,9 +137,8 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Movement()
     {
-        if (!isDashing)
-        {
-            
+        if (!isDashing && !isRecoiling)
+        {  
             Flip();
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
@@ -158,7 +157,6 @@ public class Player : MonoBehaviour
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
             }
-            Debug.Log("rb.velocity Movement: " + rb.velocity);
         }
     }
 
@@ -307,7 +305,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float horizontalAttackRangeX, horizontalAttackRangeY;
     [SerializeField] private float verticalAttackRangeX, verticalAttackRangeY;
     [SerializeField] private float TOTAL_ATTACK_TIME;
-    [SerializeField] private float attackHorRecoil;
+    [SerializeField] private float attackHorRecoil, RECOIL_DURATION;
+    private float recoilTime;
+    RecoilDir recoilDir;
+    private bool isRecoiling;
     private float attackTime;
 
     public bool isAttacking = false;
@@ -335,39 +336,18 @@ public class Player : MonoBehaviour
                 // Damage enemies here
                 Debug.Log("SMHMACK");
             }
-            //if (direction == Direction.down)
-            //    rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
-            //if (direction == Direction.up)
-            //    rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
-            if (direction == Direction.left)
+
+            //Apply knockback(TODO)
+            if (Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies) || Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, GameManager.Instance.ground))
             {
-                Debug.Log("rb.velocity before: " + rb.velocity);
-
-                rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
-
-                Debug.Log("rb.velocity after: " + rb.velocity);
+                if (direction == Direction.right)
+                {
+                    isRecoiling = true;
+                    recoilDir = RecoilDir.left;
+                    recoilTime = RECOIL_DURATION;
+                    rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
+                }
             }
-
-            if (direction == Direction.right)
-            {
-                Debug.Log("rb.velocity before: " + rb.velocity);
-                rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
-                Debug.Log("rb.velocity after: " + rb.velocity);
-            }
-                
-
-            //Apply knockback (TODO)
-            //if (Physics2D.OverlapCircle(attackPos.position, attackRange, enemies))
-            //{
-            //    if (direction == Direction.down)
-            //        rb.velocity = new Vector2(rb.velocity.x, attackHorRecoil);
-            //    if (direction == Direction.up)
-            //        rb.velocity = new Vector2(rb.velocity.x, -attackHorRecoil);
-            //    if (direction == Direction.left)
-            //        rb.velocity = new Vector2(attackHorRecoil, rb.velocity.y);
-            //    if (direction == Direction.right)
-            //        rb.velocity = new Vector2(-attackHorRecoil, rb.velocity.y);
-            //}
         }
     }
 
@@ -382,6 +362,22 @@ public class Player : MonoBehaviour
             else
             {
                 isAttacking = false;
+            }
+        }
+        if (isRecoiling)
+        {
+            if (recoilTime > 0)
+            {
+                if (recoilDir == RecoilDir.left)
+                {
+                    rb.velocity = (double)rb.velocity.x <= -(double)attackHorRecoil ? new Vector2(rb.velocity.x - attackHorRecoil, rb.velocity.y) : new Vector2(-attackHorRecoil, rb.velocity.y);
+                    Debug.Log(rb.velocity);
+                    recoilTime -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                isRecoiling = false;
             }
         }
     }

@@ -14,3 +14,11 @@ public enum State
     dashing,
     attacking
 }
+
+public enum RecoilDir
+{
+    up,
+    down,
+    left,
+    right
+}
