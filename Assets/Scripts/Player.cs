@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour
         if (variableJump)
             controls.Player.Jump.canceled += _ => CancelJump();
         controls.Player.Dash.performed += _ => Dash();
+        controls.Player.Attack.performed += _ => SwordBoop();
 
 
     }
@@ -76,6 +78,7 @@ public class Player : MonoBehaviour
         controls.Player.Jump.Enable();
         if (startWithDash)
             controls.Player.Dash.Enable();
+        controls.Player.Attack.Enable();
     }
 
     private void OnDisable()
@@ -93,6 +96,7 @@ public class Player : MonoBehaviour
         if (variableJump)
             JumpQueue();
         DashCounter();
+        SwordBoopCounter();
     }
 
     private void FixedUpdate()
@@ -280,6 +284,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask enemies;
     [SerializeField] private float attackRange;
     [SerializeField] private float TOTAL_ATTACK_TIME;
+    [SerializeField] private float attackKnockback;
     private float attackTime;
 
     public bool isAttacking = false;
@@ -290,12 +295,48 @@ public class Player : MonoBehaviour
             isAttacking = true;
             attackTime = TOTAL_ATTACK_TIME;
             Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemies);
+
+            for(int i = 0; i < enemiesHit.Length; i++)
+            {
+                // Damage enemies here
+                Debug.Log("SMHMACK");
+            }
+
+            ////Apply knockback (TODO)
+            //if (Physics2D.OverlapCircle(attackPos.position, attackRange, enemies))
+            //{
+            //    if (direction == Direction.down)
+            //        rb.velocity = new Vector2(rb.velocity.x, attackKnockback);
+            //    if (direction == Direction.up)
+            //        rb.velocity = new Vector2(rb.velocity.x, -attackKnockback);
+            //    if (direction == Direction.left)
+            //        rb.velocity = new Vector2(attackKnockback, rb.velocity.y);
+            //    if (direction == Direction.right)
+            //        rb.velocity = new Vector2(-attackKnockback, rb.velocity.y);
+            //}
         }
     }
 
-    private void SwordBoopCooldown()
+    private void SwordBoopCounter()
     {
+        if (isAttacking)
+        {
+            if (attackTime > 0)
+            {
+                attackTime -= Time.deltaTime;
+            }
+            else
+            {
+                isAttacking = false;
+            }
+        }
+    }
 
+    // ONLY FOR DEBUGGING AND TESTING
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 
     #endregion Sword Attack

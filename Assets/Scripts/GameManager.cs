@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Player player;
-    [SerializeField] private LayerMask ground;
-    [SerializeField] public float checkRadius;
+    public LayerMask ground;
+    public float checkRadius;
 
 
 
