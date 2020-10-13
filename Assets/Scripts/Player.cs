@@ -196,6 +196,7 @@ public class Player : MonoBehaviour
         //animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
+            AudioManager.instance.PlaySound("jump");
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpCounter = MIN_JUMP_COUNTER;
@@ -230,6 +231,34 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Adds boost to player after entering Rift
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "ShadowRift" && isDashing)
+        {
+            if(direction == Direction.right)
+            {
+                rb.velocity = Vector2.right * dashSpeed * 3;
+                Debug.Log("Player Triggered");
+            }
+            if(direction == Direction.left)
+            {
+                rb.velocity = Vector2.left * dashSpeed * 3;
+            }
+            else if (direction == Direction.up)
+            {
+                rb.velocity = Vector2.up * dashSpeed * 3;
+            }
+            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
+            {
+                rb.velocity = Vector2.down * dashSpeed * 3;
+            }
+        }
+        Debug.Log("Player Not Triggered");
+    }
     #endregion Movement
 
     #region Abilities
@@ -243,6 +272,8 @@ public class Player : MonoBehaviour
         if (canDash)
         {
             animator.SetBool("IsDashing", true);
+            AudioManager.instance.PlaySound("dash2");
+
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
