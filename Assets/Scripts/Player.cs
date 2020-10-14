@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
@@ -117,12 +117,14 @@ public class Player : MonoBehaviour
     #region Update Methods
     private void Update()
     {
+        DeathCheck();
         if (variableJump)
             JumpQueue();
         DashCounter();
         SwordBoopCounter();
+        Recoil();
 
-        if (GetSword == true)
+        if (GetSword)
         {
             sword_sprite.SetActive(true);
         }
@@ -250,14 +252,6 @@ public class Player : MonoBehaviour
             localScale.x *= -1;
             transform.localScale = localScale;
         }
-    }
-
-    /// <summary>
-    /// Adds boost to player after entering Rift
-    /// </summary>
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        int i = 0;
     }
 
     public void Launch()
@@ -516,6 +510,10 @@ public class Player : MonoBehaviour
                 isAttacking = false;
             }
         }
+    }
+
+    public void Recoil()
+    {
         if (isRecoiling)
         {
             if (recoilTime > 0)
@@ -534,6 +532,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void SetRecoil(RecoilDir dirToRecoil)
+    {
+        isRecoiling = true;
+        recoilDir = dirToRecoil;
+    }
+
     // ONLY FOR DEBUGGING AND TESTING
     private void OnDrawGizmosSelected()
     {
@@ -550,4 +554,25 @@ public class Player : MonoBehaviour
     #endregion Sword Attack
 
     #endregion Abilities
+
+    #region Death
+
+    [SerializeField] Vector2 launchPower;
+    public void Die()
+    {
+        
+        OnDisable();
+        Time.timeScale = 0;
+        //SceneManager.LoadScene()
+    }
+
+    private void DeathCheck()
+    {
+        if (rb.IsTouchingLayers(enemies))
+        {
+            Die();
+        }
+    }
+
+    #endregion Death
 }
