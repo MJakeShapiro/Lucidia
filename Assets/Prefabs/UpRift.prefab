@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 847956744921980176}
   - component: {fileID: 847956744921980177}
   - component: {fileID: 847956744921980189}
+  - component: {fileID: -5727546679178367119}
   m_Layer: 0
-  m_Name: Rift
+  m_Name: UpRift
   m_TagString: ShadowRift
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,3 +145,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areaEffector: {fileID: 0}
+  boosted_directions: 00000000010000000200000003000000
+  choice: 1
+  animator: {fileID: -5727546679178367119}
+--- !u!95 &-5727546679178367119
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847956744921980178}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8504055443ae8e54eb5a4f6c76a15f48, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

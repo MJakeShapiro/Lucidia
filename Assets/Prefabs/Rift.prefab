@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 159207268633777563}
   - component: {fileID: 159207268633777562}
   - component: {fileID: 159207268633777558}
+  - component: {fileID: -8530649970006154207}
   m_Layer: 0
   m_Name: Rift
   m_TagString: ShadowRift
@@ -145,3 +146,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   areaEffector: {fileID: 0}
   boosted_directions: 00000000010000000200000003000000
+  animator: {fileID: -8530649970006154207}
+--- !u!95 &-8530649970006154207
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159207268633777561}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8504055443ae8e54eb5a4f6c76a15f48, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
