@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class RiftScript : MonoBehaviour
 {
     public AreaEffector2D areaEffector;
+
+    public Direction[] boosted_directions = { Direction.up, Direction.down, Direction.left, Direction.right };
 
 
     //Initalized area effector to 0 so player can enter without being shot
@@ -18,17 +21,23 @@ public class RiftScript : MonoBehaviour
     {
         areaEffector.forceMagnitude = 0;
     }
-    
+
     void OnTriggerEnter2D(Collider2D other)
     {
         Player myPlayer = other.GetComponent<Player>();
-        if (myPlayer.isDashing == true)
-        {
-            AudioManager.instance.PlaySound("rift-dash");
-            areaEffector.forceMagnitude = 500;
-            Debug.Log("Rift Triggered");
-        }
 
-        Debug.Log("Rift Not Triggered");
+        myPlayer.rift = this;
+
+        if (other.tag == myPlayer.tag && myPlayer.isDashing)
+        {
+            myPlayer.Launch();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        Player myPlayer = other.GetComponent<Player>();
+
+        myPlayer.rift = null;
     }
 }

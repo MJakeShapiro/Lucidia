@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
 {
@@ -47,13 +51,14 @@ public class Player : MonoBehaviour
     private float dashTime;
     private float dashCooldown = 0.0f;
     [HideInInspector] public bool canDash = true;
+    [HideInInspector] public RiftScript rift;
 
     //[Header("Attack")]
     //[SerializeField] private Transform attackPos;
     //[SerializeField] private LayerMask enemies;
     //[SerializeField] private float TOTAL_ATTACK_TIME;
     //private float attackTime;
-    
+
     //public bool isAttacking = false;
 
     //Movement States
@@ -252,14 +257,36 @@ public class Player : MonoBehaviour
     /// </summary>
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "ShadowRift" && isDashing)
+        int i = 0;
+    }
+
+    public void Launch()
+    {
+        bool allow = false;
+
+        for (int i = 0; i < rift.boosted_directions.Length; i++)
         {
-            if(direction == Direction.right)
+            Debug.Log(rift.boosted_directions[i]);
+            if (direction == rift.boosted_directions[i])
+            {
+                allow = true;
+            }
+        }
+
+        if (!allow)
+        {
+            return;
+        }
+
+        if (isDashing)
+        {
+            dashTime = TOTAL_DASH_TIME;
+            AudioManager.instance.PlaySound("rift-dash");
+            if (direction == Direction.right)
             {
                 rb.velocity = Vector2.right * dashSpeed * 3;
-                Debug.Log("Player Triggered");
             }
-            if(direction == Direction.left)
+            if (direction == Direction.left)
             {
                 rb.velocity = Vector2.left * dashSpeed * 3;
             }
@@ -272,7 +299,36 @@ public class Player : MonoBehaviour
                 rb.velocity = Vector2.down * dashSpeed * 3;
             }
         }
-        Debug.Log("Player Not Triggered");
+        else
+        {
+            animator.SetBool("IsDashing", true);
+            AudioManager.instance.PlaySound("dash2");
+
+            if (!GameManager.Instance.IsGrounded(feetPos))
+                hasAirDashed = true;
+
+            isDashing = true;
+            dashTime = TOTAL_DASH_TIME;
+            rb.gravityScale = 0.0f;
+
+            AudioManager.instance.PlaySound("rift-dash");
+            if (direction == Direction.right)
+            {
+                rb.velocity = Vector2.right * dashSpeed * 3;
+            }
+            if (direction == Direction.left)
+            {
+                rb.velocity = Vector2.left * dashSpeed * 3;
+            }
+            else if (direction == Direction.up)
+            {
+                rb.velocity = Vector2.up * dashSpeed * 3;
+            }
+            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
+            {
+                rb.velocity = Vector2.down * dashSpeed * 3;
+            }
+        }
     }
     #endregion Movement
 
@@ -299,6 +355,25 @@ public class Player : MonoBehaviour
             GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
 
             Destroy(DashEffectToDestroy, 0.2f);
+            if (rift != null)
+            {
+                bool allow = false;
+
+                for (int i = 0; i < rift.boosted_directions.Length; i++)
+                {
+                    if (direction == rift.boosted_directions[i])
+                    {
+                        allow = true;
+                    }
+                }
+
+                if (allow)
+                {
+                    Launch();
+                    return;
+                }
+            }
+
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
             else

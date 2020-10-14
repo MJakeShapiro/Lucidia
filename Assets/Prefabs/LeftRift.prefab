@@ -25,7 +25,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 847956744921980178, guid: 0331c4e13d205be4a9cfcd26691288af, type: 3}
       propertyPath: m_Name
-      value: Rift (2)
+      value: LeftRift
+      objectReference: {fileID: 0}
+    - target: {fileID: 847956744921980189, guid: 0331c4e13d205be4a9cfcd26691288af, type: 3}
+      propertyPath: boosted_directions.Array.data[0]
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 847956744921980190, guid: 0331c4e13d205be4a9cfcd26691288af, type: 3}
       propertyPath: m_LocalPosition.x
