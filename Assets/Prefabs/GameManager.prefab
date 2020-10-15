@@ -47,4 +47,8 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 256
+  wall:
+    serializedVersion: 2
+    m_Bits: 1024
   checkRadius: 0.1
+  currentScene: 0
