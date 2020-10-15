@@ -763,7 +763,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.96, y: -2, z: -11.489539}
+  m_LocalPosition: {x: -12.566004, y: 2.083506, z: -11.489539}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2030229470}
@@ -1134,6 +1134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1172970894}
   - component: {fileID: 1172970893}
+  - component: {fileID: 1172970895}
   m_Layer: 0
   m_Name: Background_Level_01
   m_TagString: Untagged
@@ -1206,6 +1207,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &1172970895
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172970892}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 16.685682, y: 23.88}
+    newSize: {x: 16.685682, y: 23.88}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 3.2706738, y: -8.97832}
+      - {x: 3.3056543, y: -8.96666}
+      - {x: 3.3056543, y: -8.93168}
+      - {x: 3.2706738, y: -8.920019}
+      - {x: 3.2473533, y: -8.943339}
+    - - {x: -8.331182, y: 3.952793}
+      - {x: -8.331182, y: -8.057168}
+      - {x: -8.284541, y: -8.068828}
+      - {x: -0.09962214, y: -9.148623}
+      - {x: 8.342841, y: -8.068828}
+      - {x: 8.342841, y: 3.952793}
+    - - {x: -4.996377, y: 4.3842187}
+      - {x: -5.008037, y: 4.349238}
+      - {x: -5.008037, y: 4.267617}
+      - {x: -4.938076, y: 4.267617}
+      - {x: -4.891435, y: 4.2792773}
+      - {x: -4.891435, y: 4.337578}
+      - {x: -4.938076, y: 4.3842187}
 --- !u!1001 &1235576701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1841,6 +1885,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2030229470}
   - component: {fileID: 2030229469}
+  - component: {fileID: 2030229471}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -1898,6 +1943,23 @@ Transform:
   m_Father: {fileID: 519420032}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2030229471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030229468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2fba25a5cd15594e8f050a11e386c80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ConfineMode: 0
+  m_BoundingVolume: {fileID: 0}
+  m_BoundingShape2D: {fileID: 1172970895}
+  m_ConfineScreenEdges: 1
+  m_Damping: 0
 --- !u!1 &2091049024
 GameObject:
   m_ObjectHideFlags: 0
