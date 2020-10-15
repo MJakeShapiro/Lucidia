@@ -284,19 +284,19 @@ public class Player : MonoBehaviour
             AudioManager.instance.PlaySound("rift-dash");
             if (direction == Direction.right)
             {
-                rb.velocity = Vector2.right * dashSpeed * 3;
+                rb.velocity = Vector2.right * dashSpeed * 2.5f;
             }
             if (direction == Direction.left)
             {
-                rb.velocity = Vector2.left * dashSpeed * 3;
+                rb.velocity = Vector2.left * dashSpeed * 2.5f;
             }
             else if (direction == Direction.up)
             {
-                rb.velocity = Vector2.up * dashSpeed * 3;
+                rb.velocity = Vector2.up * dashSpeed * 2.5f;
             }
             else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
             {
-                rb.velocity = Vector2.down * dashSpeed * 3;
+                rb.velocity = Vector2.down * dashSpeed * 2.5f;
             }
         }
         else
