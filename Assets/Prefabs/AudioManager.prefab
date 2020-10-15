@@ -51,7 +51,7 @@ MonoBehaviour:
     volMULT: 0
     pitMULT: 0
     loop: 1
-    isMusic: 1
+    isMusic: 0
   - name: groovy
     clip: {fileID: 8300000, guid: d4741e61d9bf63b45831bdf587e2b33a, type: 3}
     volume: 0.01
@@ -59,7 +59,7 @@ MonoBehaviour:
     volMULT: 0
     pitMULT: 0
     loop: 1
-    isMusic: 1
+    isMusic: 0
   - name: dash1
     clip: {fileID: 8300000, guid: da52dac03c968ba4ea50559b50042813, type: 3}
     volume: 0.5
@@ -143,6 +143,14 @@ MonoBehaviour:
   - name: sad piano
     clip: {fileID: 8300000, guid: 44616d4113cd4dc4ca212b96a2de3cfd, type: 3}
     volume: 0.5
+    pitch: 1
+    volMULT: 0
+    pitMULT: 0
+    loop: 1
+    isMusic: 0
+  - name: main-theme
+    clip: {fileID: 8300000, guid: 75c7e86b4f7d8c943aee390487e20546, type: 3}
+    volume: 0.75
     pitch: 1
     volMULT: 0
     pitMULT: 0
