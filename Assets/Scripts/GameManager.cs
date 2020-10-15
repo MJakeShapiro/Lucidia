@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public Player player;
     public LayerMask ground;
+    public LayerMask wall;
     public float checkRadius;
 
 
