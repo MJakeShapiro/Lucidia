@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public LayerMask ground;
     public LayerMask wall;
     public float checkRadius;
-
+    public int currentScene;
 
 
     //setup of singleton entity

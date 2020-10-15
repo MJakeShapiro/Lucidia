@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
@@ -50,6 +50,8 @@ public class Player : MonoBehaviour
     private float dashCooldown = 0.0f;
     [HideInInspector] public bool canDash = true;
     [HideInInspector] public RiftScript rift;
+    [HideInInspector] public bool inRift = false;
+    [HideInInspector] public bool boosted = false;
 
     //[Header("Attack")]
     //[SerializeField] private Transform attackPos;
@@ -64,6 +66,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     private bool cancelJumpingQueue = false;
     private Direction direction = Direction.right;
+    public Direction GetDirection { get => direction; }
     private State state = State.idle;
 
     [Header("Playtest bools")]
@@ -123,8 +126,9 @@ public class Player : MonoBehaviour
             JumpQueue();
         DashCounter();
         SwordBoopCounter();
+        Recoil();
 
-        if (GetSword == true)
+        if (GetSword)
         {
             sword_sprite.SetActive(true);
         }
@@ -254,65 +258,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Adds boost to player after entering Rift
-    /// </summary>
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        int i = 0;
-    }
-
     public void Launch()
     {
-        bool allow = false;
-
-        for (int i = 0; i < rift.boosted_directions.Length; i++)
-        {
-            Debug.Log(rift.boosted_directions[i]);
-            if (direction == rift.boosted_directions[i])
-            {
-                allow = true;
-            }
-        }
-
-        if (!allow)
-        {
-            return;
-        }
-
-        if (isDashing)
-        {
-            dashTime = TOTAL_DASH_TIME;
-            AudioManager.instance.PlaySound("rift-dash");
-            if (direction == Direction.right)
-            {
-                rb.velocity = Vector2.right * dashSpeed * 2.5f;
-            }
-            if (direction == Direction.left)
-            {
-                rb.velocity = Vector2.left * dashSpeed * 2.5f;
-            }
-            else if (direction == Direction.up)
-            {
-                rb.velocity = Vector2.up * dashSpeed * 2.5f;
-            }
-            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
-            {
-                rb.velocity = Vector2.down * dashSpeed * 2.5f;
-            }
-        }
-        else
+        if (!isDashing)
         {
             animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
-
-            if (!GameManager.Instance.IsGrounded(feetPos))
-                hasAirDashed = true;
-
             isDashing = true;
-            dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
-
+        }
+            dashTime = TOTAL_DASH_TIME;
             AudioManager.instance.PlaySound("rift-dash");
             if (direction == Direction.right)
             {
@@ -330,7 +285,7 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = Vector2.down * dashSpeed * 3;
             }
-        }
+            ResetDash();
     }
     #endregion Movement
 
@@ -344,37 +299,21 @@ public class Player : MonoBehaviour
     {
         if (canDash)
         {
+            isDashing = true;
             animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
-            isDashing = true;
             dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
 
-            GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
-
+            GameObject DashEffectToDestroy = Instantiate(dashEffect, transform.position, Quaternion.identity);
             Destroy(DashEffectToDestroy, 0.2f);
-            if (rift != null)
-            {
-                bool allow = false;
 
-                for (int i = 0; i < rift.boosted_directions.Length; i++)
-                {
-                    if (direction == rift.boosted_directions[i])
-                    {
-                        allow = true;
-                    }
-                }
-
-                if (allow)
-                {
-                    Launch();
-                    return;
-                }
-            }
+            if (inRift)
+                return;
 
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
@@ -410,11 +349,17 @@ public class Player : MonoBehaviour
         {
             if (dashTime <= 0.0f)
             {
+                Debug.LogError("boosted: " + boosted);
+                Debug.LogError("canDash: " + canDash);
                 rb.velocity = Vector2.zero;
                 rb.gravityScale = 4.0f;
                 isDashing = false;
-                canDash = false;
-                dashCooldown = MIN_DASH_COOLDOWN;
+                if (!boosted)
+                {
+                    canDash = false;
+                    dashCooldown = MIN_DASH_COOLDOWN;
+                }
+                boosted = false;
             }
             else
             {
@@ -433,11 +378,17 @@ public class Player : MonoBehaviour
 
         }
     }
+
+    public void ResetDash()
+    {
+        canDash = true;
+        dashCooldown = 0.0f;
+
+    }
     public void CancelDash()
     {
         dashTime = 0.0f;
     }
-
     #endregion Dash
 
     #region Sword Attack
@@ -510,6 +461,10 @@ public class Player : MonoBehaviour
                 isAttacking = false;
             }
         }
+    }
+
+    public void Recoil()
+    {
         if (isRecoiling)
         {
             if (recoilTime > 0)
@@ -526,6 +481,12 @@ public class Player : MonoBehaviour
                 isRecoiling = false;
             }
         }
+    }
+
+    public void SetRecoil(RecoilDir dirToRecoil)
+    {
+        isRecoiling = true;
+        recoilDir = dirToRecoil;
     }
 
     // ONLY FOR DEBUGGING AND TESTING
@@ -546,20 +507,23 @@ public class Player : MonoBehaviour
     #endregion Abilities
 
     #region Death
+
+    [SerializeField] Vector2 launchPower;
+    public void Die()
+    {
+
+        //OnDisable();
+        //Time.timeScale = 0;
+        SceneManager.LoadScene(GameManager.Instance.currentScene);
+    }
+
     private void DeathCheck()
     {
         if (rb.IsTouchingLayers(enemies))
         {
-            Death();
+            Die();
         }
     }
 
-    public void Death()
-    {
-        Time.timeScale = 0;
-        OnDisable();
-    }
-
     #endregion Death
-
 }
