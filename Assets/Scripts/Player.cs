@@ -528,4 +528,16 @@ public class Player : MonoBehaviour
     }
 
     #endregion Death
+
+    #region FallDetector
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Whats going on?");
+        if(other.tag == "FallDetector")
+        {
+            Debug.Log("Fall Detected!");
+            Die();
+        }
+    }
+    #endregion FallDetector
 }
