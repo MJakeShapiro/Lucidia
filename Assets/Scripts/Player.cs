@@ -428,14 +428,6 @@ public class Player : MonoBehaviour
             else
                 enemiesHit = Physics2D.OverlapBoxAll(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies);
 
-
-            for (int i = 0; i < enemiesHit.Length; i++)
-            {
-                // Damage enemies here
-                Debug.Log("SMHMACK");
-            }
-
-            //Apply knockback(TODO)
             if (Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, enemies) || Physics2D.OverlapBox(horizontalAttackPos.position, new Vector2(horizontalAttackRangeX, horizontalAttackRangeY), 0.0f, GameManager.Instance.ground))
             {
                 recoilTime = RECOIL_DURATION;
@@ -445,6 +437,15 @@ public class Player : MonoBehaviour
                 if (direction == Direction.right)
                     recoilDir = RecoilDir.left;
             }
+
+            for (int i = 0; i < enemiesHit.Length; i++)
+            {
+                Destroy(enemiesHit[i].gameObject);
+                Debug.Log("SMHMACK");
+            }
+
+            //Apply knockback(TODO)
+           
         }
     }
 
@@ -514,13 +515,14 @@ public class Player : MonoBehaviour
 
         //OnDisable();
         //Time.timeScale = 0;
-        SceneManager.LoadScene(GameManager.Instance.currentScene);
+        SceneManager.LoadScene(1);
     }
 
     private void DeathCheck()
     {
         if (rb.IsTouchingLayers(enemies))
         {
+            Debug.Log("HERE");
             Die();
         }
     }
