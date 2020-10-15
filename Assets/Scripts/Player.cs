@@ -449,7 +449,9 @@ public class Player : MonoBehaviour
     #region Sword Attack
 
     [Header("Attack")]
-    [SerializeField] private Transform horizontalAttackPos, upAttackPos, downAttackPos;
+    [SerializeField] private Transform horizontalAttackPos;
+    [SerializeField] private Transform upAttackPos;
+    [SerializeField] private Transform downAttackPos;
     [SerializeField] private LayerMask enemies;
     [SerializeField] private float horizontalAttackRangeX, horizontalAttackRangeY;
     [SerializeField] private float verticalAttackRangeX, verticalAttackRangeY;
