@@ -6,8 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public Player player;
     public LayerMask ground;
+    public LayerMask wall;
     public float checkRadius;
-
+    public int currentScene;
 
 
     //setup of singleton entity
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
+        if (instance != null)
+            Destroy(this.gameObject);
         instance = this;
         DontDestroyOnLoad(this);
     }

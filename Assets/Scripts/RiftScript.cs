@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using TMPro;
 using UnityEngine;
 
 public enum type
@@ -93,17 +94,46 @@ public class RiftScript : MonoBehaviour
         Player myPlayer = other.GetComponent<Player>();
 
         myPlayer.rift = this;
+        myPlayer.inRift = true;
 
         if (other.tag == myPlayer.tag && myPlayer.isDashing)
         {
-            myPlayer.Launch();
+            for (int i = 0; i < boosted_directions.Length; i++)
+            {
+                if (myPlayer.GetDirection == boosted_directions[i])
+                {
+                    myPlayer.boosted = true;
+                    myPlayer.Launch();
+                }
+            }
+
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        Player myPlayer = other.GetComponent<Player>();
+
+        myPlayer.rift = this;
+
+        if (other.tag == myPlayer.tag && myPlayer.isDashing)
+        {
+            for (int i = 0; i < boosted_directions.Length; i++)
+            {
+                if (myPlayer.GetDirection == boosted_directions[i])
+                {
+                    myPlayer.boosted = true;
+                    myPlayer.Launch();
+                }
+            }
+
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         Player myPlayer = other.GetComponent<Player>();
-
+        myPlayer.inRift = false;
         myPlayer.rift = null;
     }
 }

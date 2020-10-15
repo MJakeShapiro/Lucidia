@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455711955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.026, y: -0.461, z: 0}
+  m_LocalPosition: {x: -0.056, y: -0.438, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 513852707028939513}
@@ -128,8 +128,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -753330431
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 4550352783325327702, guid: a257ec82f965b424dafda59e87a65ca6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -159,7 +159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1803476060
 Transform:
   m_ObjectHideFlags: 0
@@ -211,8 +211,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -753330431
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -3753825769889500098, guid: 6eef443d50eed8c4ab3ed0d628a4a19e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -232,7 +232,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803476059}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -382,6 +382,7 @@ GameObject:
   - component: {fileID: 513852707028939514}
   - component: {fileID: 513852707028939515}
   - component: {fileID: 1705009979}
+  - component: {fileID: 4122126929234183709}
   - component: {fileID: 1988835032}
   - component: {fileID: 1838956889}
   - component: {fileID: 1341502035}
@@ -449,8 +450,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -753330431
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 5651646158922815434, guid: a0419493aad394386893226316d28407, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -497,9 +498,35 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.051900446}
+  m_Offset: {x: -0.06, y: -0.26}
   serializedVersion: 2
-  m_Radius: 0.45190042
+  m_Radius: 0.21
+--- !u!61 &4122126929234183709
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513852707028939508}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.24}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.34, y: 1.04}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.34, y: 0.45}
+  m_EdgeRadius: 0
 --- !u!114 &1988835032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -551,7 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1341502035}
-  GetSword: 0
+  GetSword: 1
   sword_sprite: {fileID: 1803476059}
   rb: {fileID: 0}
   feetPos: {fileID: 455711956}
@@ -565,6 +592,9 @@ MonoBehaviour:
   isDashing: 0
   hasAirDashed: 0
   canDash: 1
+  rift: {fileID: 0}
+  inRift: 0
+  boosted: 0
   airVelocity: {x: 0, y: 0}
   isJumping: 0
   variableJump: 1
@@ -584,6 +614,7 @@ MonoBehaviour:
   attackHorRecoil: 5
   RECOIL_DURATION: 0.05
   isAttacking: 0
+  launchPower: {x: 0, y: 0}
 --- !u!95 &1341502035
 Animator:
   serializedVersion: 3
