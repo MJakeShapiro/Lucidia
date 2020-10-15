@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DemoPlanB.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/EarthLevel.unity
+    guid: bad49634a996f4748986a53451b5a283
+  - enabled: 1
+    path: Assets/Scenes/PlayerTesting 1.unity
+    guid: e9d280d124c625f47a5f4ec7acd3cb22
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 91e68fb977890604fa4a825bffb93131, type: 2}

@@ -17,15 +17,13 @@ public class Player : MonoBehaviour
     //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
-    public bool GetSword;
+    public bool GetSword =false;
     public GameObject sword_sprite;
 
 
     #endregion Art/Animation
 
     #region Properties
-
-
 
     // Takes players input
     public InputMaster controls;
@@ -82,7 +80,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         //GetSword bool to start without sword
-        GetSword = false;
+        //GetSword = false;
         sword_sprite.SetActive(false);
 
         rb = GetComponent<Rigidbody2D>();
@@ -101,6 +99,8 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+
+        
         controls.Player.Movement.Enable();
         controls.Player.Jump.Enable();
         if (startWithDash)
@@ -113,6 +113,7 @@ public class Player : MonoBehaviour
         controls.Player.Movement.Disable();
         controls.Player.Jump.Disable();
         controls.Player.Dash.Disable();
+        controls.Player.Attack.Disable();
     }
 
     #endregion Initialization
@@ -196,11 +197,9 @@ public class Player : MonoBehaviour
             {
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
-            }
-            
-        }
-           
-        }
+            } 
+        }   
+    }
 
     /// <summary>
     /// Jumps Player and sets counter for Variable Jump
@@ -246,7 +245,9 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Checks if players needs to be flipped and flips based on direction
+    /// </summary>
     public void Flip()
     {
         Vector2 localScale = transform.localScale;
