@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NPC-Endpoints
   - ShadowRift
+  - FallDetector
   layers:
   - Default
   - TransparentFX
