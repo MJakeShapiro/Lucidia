@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
-    public bool GetSword;
+    public bool GetSword =false;
     public GameObject sword_sprite;
 
 
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         //GetSword bool to start without sword
-        GetSword = false;
+        //GetSword = false;
         sword_sprite.SetActive(false);
 
         rb = GetComponent<Rigidbody2D>();
@@ -98,6 +98,8 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+
+        
         controls.Player.Movement.Enable();
         controls.Player.Jump.Enable();
         if (startWithDash)
