@@ -9,5 +9,6 @@ public class SceneLoader : MonoBehaviour
     void OnTriggerEnter2D(Collider2D trigger)
     {
         SceneManager.LoadScene(SceneToLoad);
+        GameManager.Instance.currentScene = SceneToLoad;
     }
 }
