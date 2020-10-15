@@ -515,7 +515,7 @@ public class Player : MonoBehaviour
 
         //OnDisable();
         //Time.timeScale = 0;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(GameManager.Instance.currentScene);
     }
 
     private void DeathCheck()
