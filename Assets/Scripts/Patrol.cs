@@ -22,13 +22,13 @@ public class Patrol : MonoBehaviour
     //{
     //    distToPoint = Vector2.Distance(transform.position, rotationPoints[nestRotationPoint].transform.position);
     //    transform.position = Vector2.MoveTowards(transform.position, rotationPoints[nestRotationPoint].transform.position, moveSpeed * Time.deltaTime);
-        
+
     //    if(distToPoint < 0.2f)
     //    {
     //        TakeTurn();
     //    }
     //}
-    
+
     //void TakeTurn()
     //{
     //    Vector3 currentRot = transform.eulerAngles;
@@ -87,116 +87,39 @@ public class Patrol : MonoBehaviour
 
 
 
-    
-    public float speed;
-    public float wallDistance, groundDistance;
-    private bool movingRight = true;
-    private bool passedRight = false, passedLeft = false;
-    public Transform rightWallDetection, rightGroundDetection;
-    public Transform leftWallDetection,  leftGroundDetection;
-    public Transform leftRotationPoint, rightRotationPoint;
-    RaycastHit2D rightWallInfo, leftWallInfo, rightGroundInfo, leftGroundInfo;
+
+    [SerializeField] float speed;
+    [SerializeField] float wallDistance, groundDistance;
+    [SerializeField] Transform rightWallDetection;
+    [SerializeField] Transform leftGroundDetection;
+    [SerializeField] Transform leftRotationPoint;
+    [SerializeField] LayerMask endpoints;
 
 
-    private void Update()
+    private void FixedUpdate()
     {
+        if(Physics2D.OverlapCircle(rightWallDetection.position, wallDistance, endpoints))
+        {
+            Debug.Log("TOUCHED AN ENDPOINT");
+            transform.Rotate(0, 180, 0);
+        }
+        if (Physics2D.OverlapCircle(rightWallDetection.position, wallDistance, GameManager.Instance.wall) || Physics2D.OverlapCircle(rightWallDetection.position, wallDistance, GameManager.Instance.ground))
+        {
+            Debug.Log("TOUCHED WALL OR GROUND ON RIGHT SIDE");
+            transform.Rotate(0, 0, 90);
+        }
+
+        if(!Physics2D.OverlapCircle(leftGroundDetection.position, groundDistance, GameManager.Instance.ground) && !Physics2D.OverlapCircle(leftGroundDetection.position, groundDistance, GameManager.Instance.wall))
+        {
+            transform.RotateAround(leftRotationPoint.transform.position, leftRotationPoint.transform.forward, -90);
+            Debug.Log("NOT TOUCHING WALL OR GROUND ON LEFT CORNER");
+        }
+
         transform.Translate(Vector2.right * speed * Time.deltaTime);
-        RaycastHit2D rightWallInfo = Physics2D.Raycast(rightWallDetection.position, Vector2.right, wallDistance);
-        RaycastHit2D rightGroundInfo = Physics2D.Raycast(rightGroundDetection.position, Vector2.down, groundDistance);
-        RaycastHit2D leftGroundInfo = Physics2D.Raycast(leftGroundDetection.position, Vector2.down, groundDistance);
-        RaycastHit2D leftWallInfo = Physics2D.Raycast(leftWallDetection.position, Vector2.left, wallDistance);
 
-        // Check if meeting edge on right side to wrap around
-        if (rightGroundInfo)
-        {
-            if (rightGroundInfo.transform.gameObject.layer != LayerMask.NameToLayer("Ground") && rightGroundInfo.transform.gameObject.layer != LayerMask.NameToLayer("Wall"))
-            {
-                if (passedLeft)
-                {
-                    transform.Rotate(0, 0, -270);
-                    passedLeft = false;
-                }
-                else
-                    passedRight = true;
+       
 
-                //transform.Rotate(0, 0, -90);
-            }
-        }
-        else
-        {
-            if (passedLeft)
-            {
-                transform.Rotate(0, 0, -270);
-                passedLeft = false;
-            }
-
-            else
-                passedRight = true;
-            //transform.Rotate(0, 0, 90);
-        }
-
-        // Check if meeting edge on left side to wrap around
-        if (leftGroundInfo)
-        {
-            if (leftGroundInfo.transform.gameObject.layer != LayerMask.NameToLayer("Ground") && leftGroundInfo.transform.gameObject.layer != LayerMask.NameToLayer("Wall"))
-            {
-                if (passedRight)
-                {
-                    transform.RotateAround(leftRotationPoint.transform.position, leftRotationPoint.transform.forward, -90);
-                    passedRight = false;
-                }
-                else
-                    passedLeft = true;
-            }
-        }
-        else
-        {
-            Debug.LogError("leftGround2");
-
-            if (passedRight)
-            {
-                transform.RotateAround(leftRotationPoint.transform.position, leftRotationPoint.transform.forward, -90);
-                passedRight = false;
-            }
-
-            else
-                passedLeft = true;
-
-        }
-
-        // Check if meeting wall or floor corner on right side
-        if (rightWallInfo)
-        {
-            if (rightWallInfo.collider.tag == "NPC-Endpoints")
-            {
-                Debug.LogError("right ENDPOINT");
-                transform.localEulerAngles = new Vector3(0, 180, 0);
-                Debug.LogError(leftGroundInfo);
-
-            }
-            if (rightWallInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ground") || rightWallInfo.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            {
-                Debug.Log("right Wall or Ground");
-                transform.Rotate(0, 0, 90);
-
-            }
-        }
-
-        // Check if meeting wall or floor corner on right side
-        if (leftWallInfo)
-        {
-            if (leftWallInfo.collider.tag == "NPC-Endpoints")
-            {
-                Debug.LogError("left ENDPOINT");
-                transform.localEulerAngles = new Vector3(0, 0, 0);
-            }
-            if (leftWallInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ground") || leftWallInfo.transform.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            {
-                Debug.Log("left Wall or Ground");
-                transform.Rotate(0, 0, -90);
-
-            }
-        }
+        
         //if (wallInfo.collider.tag == "NPC-Endpoints")
         //{
         //    if (movingRight == true)
@@ -209,25 +132,6 @@ public class Patrol : MonoBehaviour
         //        transform.eulerAngles = new Vector3(0, 0, 0);
         //        movingRight = true;
         //    }
-        //}
-        //else if (groundInfo.collider == false && wallInfo.collider == false)
-        //{
-        //    transform.Rotate(0, 0, -90);
-        //    if (movingRight == true)
-        //    {
-        //        transform.Rotate(Vector2.down);
-
-        //        transform.eulerAngles = new Vector3(0, -270, 0);
-        //    }
-        //    else
-        //    {
-        //        transform.Rotate(Vector2.up);
-        //        transform.eulerAngles = new Vector3(0, 90, 0);
-        //    }
-        //}
-        //if (wallInfo.collider.tag != "NPC-Endpoints" && groundInfo.collider == true && wallInfo.collider == true)
-        //{
-        //    transform.Rotate(0, 0, 90);
         //}
     }
 
