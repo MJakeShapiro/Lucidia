@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
     private float dashCooldown = 0.0f;
     [HideInInspector] public bool canDash = true;
     [HideInInspector] public RiftScript rift;
+    [HideInInspector] public bool inRift = false;
+    [HideInInspector] public bool boosted = false;
 
     //[Header("Attack")]
     //[SerializeField] private Transform attackPos;
@@ -66,6 +68,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     private bool cancelJumpingQueue = false;
     private Direction direction = Direction.right;
+    public Direction GetDirection { get => direction; }
     private State state = State.idle;
 
     [Header("Playtest bools")]
@@ -256,55 +259,14 @@ public class Player : MonoBehaviour
 
     public void Launch()
     {
-        bool allow = false;
-
-        for (int i = 0; i < rift.boosted_directions.Length; i++)
-        {
-            Debug.Log(rift.boosted_directions[i]);
-            if (direction == rift.boosted_directions[i])
-            {
-                allow = true;
-            }
-        }
-
-        if (!allow)
-        {
-            return;
-        }
-
-        if (isDashing)
-        {
-            dashTime = TOTAL_DASH_TIME;
-            AudioManager.instance.PlaySound("rift-dash");
-            if (direction == Direction.right)
-            {
-                rb.velocity = Vector2.right * dashSpeed * 3;
-            }
-            if (direction == Direction.left)
-            {
-                rb.velocity = Vector2.left * dashSpeed * 3;
-            }
-            else if (direction == Direction.up)
-            {
-                rb.velocity = Vector2.up * dashSpeed * 3;
-            }
-            else if (direction == Direction.down && !GameManager.Instance.IsGrounded(feetPos))
-            {
-                rb.velocity = Vector2.down * dashSpeed * 3;
-            }
-        }
-        else
+        if (!isDashing)
         {
             animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
-
-            if (!GameManager.Instance.IsGrounded(feetPos))
-                hasAirDashed = true;
-
             isDashing = true;
-            dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
-
+        }
+            dashTime = TOTAL_DASH_TIME;
             AudioManager.instance.PlaySound("rift-dash");
             if (direction == Direction.right)
             {
@@ -322,7 +284,7 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = Vector2.down * dashSpeed * 3;
             }
-        }
+            ResetDash();
     }
     #endregion Movement
 
@@ -336,37 +298,21 @@ public class Player : MonoBehaviour
     {
         if (canDash)
         {
+            isDashing = true;
             animator.SetBool("IsDashing", true);
             AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
 
-            isDashing = true;
             dashTime = TOTAL_DASH_TIME;
             rb.gravityScale = 0.0f;
 
-            GameObject DashEffectToDestroy = Instantiate(dashEffect,transform.position,Quaternion.identity);
-
+            GameObject DashEffectToDestroy = Instantiate(dashEffect, transform.position, Quaternion.identity);
             Destroy(DashEffectToDestroy, 0.2f);
-            if (rift != null)
-            {
-                bool allow = false;
 
-                for (int i = 0; i < rift.boosted_directions.Length; i++)
-                {
-                    if (direction == rift.boosted_directions[i])
-                    {
-                        allow = true;
-                    }
-                }
-
-                if (allow)
-                {
-                    Launch();
-                    return;
-                }
-            }
+            if (inRift)
+                return;
 
             if (diagonalDash)
                 rb.velocity = new Vector2(moveDirection.x * dashSpeed, moveDirection.y * dashSpeed);
@@ -402,11 +348,17 @@ public class Player : MonoBehaviour
         {
             if (dashTime <= 0.0f)
             {
+                Debug.LogError("boosted: " + boosted);
+                Debug.LogError("canDash: " + canDash);
                 rb.velocity = Vector2.zero;
                 rb.gravityScale = 4.0f;
                 isDashing = false;
-                canDash = false;
-                dashCooldown = MIN_DASH_COOLDOWN;
+                if (!boosted)
+                {
+                    canDash = false;
+                    dashCooldown = MIN_DASH_COOLDOWN;
+                }
+                boosted = false;
             }
             else
             {
@@ -425,19 +377,17 @@ public class Player : MonoBehaviour
 
         }
     }
+
+    public void ResetDash()
+    {
+        canDash = true;
+        dashCooldown = 0.0f;
+
+    }
     public void CancelDash()
     {
         dashTime = 0.0f;
     }
-
-    //private void Flip()
-    //{
-    //    m_FacingRight = !m_FacingRight;
-
-    //    Vector3 theScale = transform.localScale;
-    //    theScale.x *= -1;
-    //    transform.localScale = theScale;
-    //}
     #endregion Dash
 
     #region Sword Attack
@@ -570,7 +520,7 @@ public class Player : MonoBehaviour
     {
         if (rb.IsTouchingLayers(enemies))
         {
-            Die();
+            //Die();
         }
     }
 
