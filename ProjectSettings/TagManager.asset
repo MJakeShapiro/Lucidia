@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - NPC-Endpoints
   - ShadowRift
+  - FallDetector
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - 
   - Ground
   - Enemy
-  - 
-  - 
+  - Wall
+  - GoombaEndpoints
   - 
   - 
   - 
@@ -39,6 +41,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 4100585955
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Platforms/Grounds,Walls
+    uniqueID: 1719972571
+    locked: 0
+  - name: Objects/Enemies Rifts
+    uniqueID: 492752489
+    locked: 0
+  - name: Player
+    uniqueID: 3541636865
     locked: 0
