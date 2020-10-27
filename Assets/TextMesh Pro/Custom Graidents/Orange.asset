@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Orange
   m_EditorClassIdentifier: 
   colorMode: 3
-  topLeft: {r: 0.9411765, g: 0.67058825, b: 0.3019608, a: 1}
+  topLeft: {r: 0.53333336, g: 0, b: 0, a: 0.15686275}
   topRight: {r: 0.9411765, g: 0.67058825, b: 0.3019608, a: 1}
   bottomLeft: {r: 0.972549, g: 0.5803922, b: 0.050980393, a: 1}
   bottomRight: {r: 0.972549, g: 0.5803922, b: 0.050980393, a: 1}
