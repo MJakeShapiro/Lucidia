@@ -15,7 +15,6 @@ public class Patrol : MonoBehaviour
     [SerializeField] Transform leftRotationPoint;
     [SerializeField] LayerMask endpoints;
 
-
     private void FixedUpdate()
     {
         if(Physics2D.OverlapCircle(rightWallDetection.position, wallDistance, endpoints))
@@ -32,6 +31,7 @@ public class Patrol : MonoBehaviour
             transform.RotateAround(leftRotationPoint.transform.position, leftRotationPoint.transform.forward, -90);
         }
         transform.Translate(Vector2.right * speed * Time.deltaTime);
+
     }
 
 }
