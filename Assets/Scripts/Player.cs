@@ -99,21 +99,12 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-
-        
-        controls.Player.Movement.Enable();
-        controls.Player.Jump.Enable();
-        if (startWithDash)
-            controls.Player.Dash.Enable();
-        controls.Player.Attack.Enable();
+        EnableControls();
     }
 
     private void OnDisable()
     {
-        controls.Player.Movement.Disable();
-        controls.Player.Jump.Disable();
-        controls.Player.Dash.Disable();
-        controls.Player.Attack.Disable();
+        DisableControls();
     }
 
     #endregion Initialization
@@ -528,6 +519,32 @@ public class Player : MonoBehaviour
     }
 
     #endregion Death
+
+    #region Miscellaneous
+
+    public void DisableControls()
+    {
+        if (controls == null)
+        {
+            Debug.LogError("controls is NULL!");
+        }
+        
+        controls.Player.Movement.Disable();
+        controls.Player.Jump.Disable();
+        controls.Player.Dash.Disable();
+        controls.Player.Attack.Disable();
+    }
+
+    public void EnableControls()
+    {
+        controls.Player.Movement.Enable();
+        controls.Player.Jump.Enable();
+        if (startWithDash)
+            controls.Player.Dash.Enable();
+        controls.Player.Attack.Enable();
+    }
+
+    #endregion Miscellaneous
 
     #region FallDetector
     void OnTriggerEnter2D(Collider2D other)
