@@ -206,7 +206,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump()
     {
-        //animator.SetBool("IsJumping", true);
+        animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             //AudioManager.instance.PlaySound("jump-ploing");
@@ -221,7 +221,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CancelJump()
     {
-        //animator.SetBool("IsJumping", false);
+        animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
