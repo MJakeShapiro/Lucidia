@@ -503,10 +503,9 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 launchPower;
     public void Die()
     {
-
-        //OnDisable();
-        //Time.timeScale = 0;
-        SceneManager.LoadScene(GameManager.Instance.currentScene);
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0.0f;
+        GameManager.Instance.ReloadScene();
     }
 
     private void DeathCheck()
