@@ -9,7 +9,7 @@ public class Sword_Pickup : MonoBehaviour
    
     private void OnTriggerEnter2D(Collider2D test)
     {
-        player_script.GetSword = true;
+        player_script.sword_sprite.SetActive(true);
         OnDestroy();
 
     }
