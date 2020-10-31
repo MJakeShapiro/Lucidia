@@ -8,11 +8,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EarthLevel.unity
     guid: bad49634a996f4748986a53451b5a283
-  - enabled: 0
-    path: Assets/Scenes/Testing/PlayerTesting 1.unity
-    guid: e9d280d124c625f47a5f4ec7acd3cb22
   - enabled: 1
     path: Assets/Scenes/BetaLevelSuggestion.unity
     guid: 4146d1e8925a735428044e8d63208c79
+  - enabled: 1
+    path: Assets/Scenes/Testing/Checkpoint Testing/CheckpointTesting2.unity
+    guid: fd4ca897c4bb54142971c0da88073d61
+  - enabled: 1
+    path: Assets/Scenes/Testing/Checkpoint Testing/CheckpointTesting.unity
+    guid: 9d44db6103dedc644b0b50fb26be27b6
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 91e68fb977890604fa4a825bffb93131, type: 2}

@@ -52,9 +52,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   checkRadius: 0.1
-  currentScene: 0
   sceneLoader: {fileID: 2648458877968392360}
+  lastCheckpointPos: {x: 0, y: 0}
   changingScenes: 0
+  playerRespawn: 0
 --- !u!1001 &11399516702648983
 PrefabInstance:
   m_ObjectHideFlags: 0
