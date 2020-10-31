@@ -94,6 +94,7 @@ public class Player : MonoBehaviour
         controls.Player.Dash.performed += _ => Dash();
         controls.Player.Attack.performed += _ => SwordBoop();
 
+        RespawnPos();
 
     }
 
@@ -299,7 +300,7 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             animator.SetBool("IsDashing", true);
-            AudioManager.instance.PlaySound("dash2");
+            //AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
@@ -510,8 +511,8 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 launchPower;
     public void Die()
     {
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0.0f;
+        OnDisable();
+        GameManager.Instance.playerRespawn = true;
         GameManager.Instance.ReloadScene();
     }
 
@@ -519,9 +520,17 @@ public class Player : MonoBehaviour
     {
         if (rb.IsTouchingLayers(enemies))
         {
-            Debug.Log("HERE");
             Die();
         }
+    }
+
+    private void RespawnPos()
+    {
+        Debug.Log("In RespawnPos");
+        if (GameManager.Instance.playerRespawn)                                                         // If player has died and is being respawned
+            transform.position = GameManager.Instance.lastCheckpointPos;    // Set their position to the last checkpoint
+        else
+            GameManager.Instance.lastCheckpointPos = transform.position;    // Else a new scene is loaded, thus new checkpoint is the starting pos
     }
 
     #endregion Death
@@ -529,7 +538,6 @@ public class Player : MonoBehaviour
     #region FallDetector
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Whats going on?");
         if(other.tag == "FallDetector")
         {
             Debug.Log("Fall Detected!");

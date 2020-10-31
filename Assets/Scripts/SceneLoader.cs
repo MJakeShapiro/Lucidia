@@ -16,7 +16,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (GameManager.Instance.changingScenes)
             return;
-
+        Time.timeScale = 0.0f;
         GameManager.Instance.changingScenes = true;
         sceneToLoad = sceneName;
         animator.SetTrigger("FadeOut");
@@ -25,6 +25,8 @@ public class SceneLoader : MonoBehaviour
     public void OnFadeComplete()
     {
         SceneManager.LoadScene(sceneToLoad);
+        Time.timeScale = 1.0f;
+       
         animator.SetTrigger("FadeIn");
         GameManager.Instance.changingScenes = false;
     }
