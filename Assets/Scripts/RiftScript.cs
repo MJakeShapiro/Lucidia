@@ -11,7 +11,6 @@ public enum type
 
 public class RiftScript : MonoBehaviour
 {
-    public AreaEffector2D areaEffector;
 
     [HideInInspector] public Direction[] boosted_directions; // = { Direction.up, Direction.down, Direction.left, Direction.right };
 
@@ -61,14 +60,10 @@ public class RiftScript : MonoBehaviour
 
         arrow = false;
         blank = true;
-
-        areaEffector = GetComponent<AreaEffector2D>();
-        areaEffector.forceMagnitude = 0;
     }
 
     void Update()
     {
-        areaEffector.forceMagnitude = 0;
     }
 
     void FixedUpdate()
