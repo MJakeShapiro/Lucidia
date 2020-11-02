@@ -17,6 +17,21 @@ TextureImporter:
   - first:
       213: -5813642610688051344
     second: Week_08_Final_Version_01_Sprite_4
+  - first:
+      213: 6609116889923326678
+    second: Insecurity_walk_0
+  - first:
+      213: -7691380872644104488
+    second: Insecurity_walk_1
+  - first:
+      213: -8536226553835986599
+    second: Insecurity_walk_2
+  - first:
+      213: 2973873845015709072
+    second: Insecurity_walk_3
+  - first:
+      213: -8062352757250754010
+    second: Insecurity_walk_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -116,7 +131,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Week_08_Final_Version_01_Sprite_0
+      name: Insecurity_walk_0
       rect:
         serializedVersion: 2
         x: 95
@@ -130,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 913a23b0126f772c0800000000000000
-      internalID: -4433804686340742375
+      spriteID: 6d21ae67bcc48bb50800000000000000
+      internalID: 6609116889923326678
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Week_08_Final_Version_01_Sprite_1
+      name: Insecurity_walk_1
       rect:
         serializedVersion: 2
         x: 499
@@ -151,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6e7f22d5bbc08720800000000000000
-      internalID: 2846498946274000492
+      spriteID: 8de60d5d8d9b24590800000000000000
+      internalID: -7691380872644104488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Week_08_Final_Version_01_Sprite_2
+      name: Insecurity_walk_2
       rect:
         serializedVersion: 2
         x: 913
@@ -172,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 24e5ddc8dbd68dd20800000000000000
-      internalID: 3303510987555823170
+      spriteID: 95169581d2b398980800000000000000
+      internalID: -8536226553835986599
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Week_08_Final_Version_01_Sprite_3
+      name: Insecurity_walk_3
       rect:
         serializedVersion: 2
         x: 1119
@@ -193,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bdb27e65fadc7e90800000000000000
-      internalID: -7026500570949960270
+      spriteID: 0958cfa7182554920800000000000000
+      internalID: 2973873845015709072
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Week_08_Final_Version_01_Sprite_4
+      name: Insecurity_walk_4
       rect:
         serializedVersion: 2
         x: 1418
@@ -214,8 +229,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0773ddaf8dac15fa0800000000000000
-      internalID: -5813642610688051344
+      spriteID: 62a7d2a22e4cc1090800000000000000
+      internalID: -8062352757250754010
       vertices: []
       indices: 
       edges: []
