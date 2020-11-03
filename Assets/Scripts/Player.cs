@@ -100,13 +100,12 @@ public class Player : MonoBehaviour
         controls.Player.Dash.performed += _ => Dash();
         controls.Player.Attack.performed += _ => SwordBoop();
 
+        RespawnPos();
 
     }
 
     private void OnEnable()
     {
-
-        
         controls.Player.Movement.Enable();
         controls.Player.Jump.Enable();
         if (startWithDash)
@@ -302,7 +301,7 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             animator.SetBool("IsDashing", true);
-            AudioManager.instance.PlaySound("dash2");
+            //AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
@@ -520,19 +519,26 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 launchPower;
     public void Die()
     {
-
-        //OnDisable();
-        //Time.timeScale = 0;
-        SceneManager.LoadScene(GameManager.Instance.currentScene);
+        OnDisable();
+        GameManager.Instance.playerRespawn = true;
+        GameManager.Instance.ReloadScene();
     }
 
     private void DeathCheck()
     {
         if (rb.IsTouchingLayers(enemies))
         {
-            Debug.Log("HERE");
             Die();
         }
+    }
+
+    private void RespawnPos()
+    {
+        Debug.Log("In RespawnPos");
+        if (GameManager.Instance.playerRespawn)                                                         // If player has died and is being respawned
+            transform.position = GameManager.Instance.lastCheckpointPos;    // Set their position to the last checkpoint
+        else
+            GameManager.Instance.lastCheckpointPos = transform.position;    // Else a new scene is loaded, thus new checkpoint is the starting pos
     }
 
     #endregion Death
@@ -540,7 +546,6 @@ public class Player : MonoBehaviour
     #region FallDetector
     void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log("Whats going on?");
         if(other.tag == "FallDetector")
         {
             Debug.Log("Fall Detected!");

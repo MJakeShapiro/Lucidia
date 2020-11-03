@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 455711956}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FeetPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 787715755}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DownAttackPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1151947443}
   - component: {fileID: 1151947444}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Onsci
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 1803476060}
   - component: {fileID: 1803476061}
   - component: {fileID: 1803476062}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: sword_lucid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2047554627}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: UpAttackPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,7 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2055489534}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: HorizontalAttackPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,9 +386,9 @@ GameObject:
   - component: {fileID: 1988835032}
   - component: {fileID: 1838956889}
   - component: {fileID: 1341502035}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -401,7 +401,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 513852707028939508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1701853, y: 0.8852319, z: -1.4895391}
+  m_LocalPosition: {x: -3.63, y: -3.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455711956}
@@ -578,7 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1341502035}
-  GetSword: 1
+  GetSword: 0
   sword_sprite: {fileID: 1803476059}
   rb: {fileID: 0}
   feetPos: {fileID: 455711956}
