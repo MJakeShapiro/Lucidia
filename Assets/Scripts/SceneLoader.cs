@@ -11,6 +11,8 @@ public class SceneLoader : MonoBehaviour
     public Slider slider;
 
     private string sceneToLoad;
+    int StartScene = 0;
+
 
     public void FadeToScene(string sceneName)
     {
@@ -55,5 +57,16 @@ public class SceneLoader : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void LoadStartScene()
+    {
+        SceneManager.LoadScene(StartScene);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("QUIITTTT!!!!");
+        Application.Quit();
     }
 }

@@ -78,9 +78,9 @@ public class RiftScript : MonoBehaviour
         else
         {
             arrow = false;
-            animator.SetBool("arrow", arrow);
+            //animator.SetBool("arrow", arrow);
             blank = true;
-            animator.SetBool("blank", blank);
+            //animator.SetBool("blank", blank);
         }
     }
 

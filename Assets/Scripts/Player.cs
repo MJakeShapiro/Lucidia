@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
-    public bool GetSword =false;
+    public bool GetSword;
     public GameObject sword_sprite;
 
 
@@ -79,9 +79,15 @@ public class Player : MonoBehaviour
     #region Initialization
     private void Awake()
     {
-        //GetSword bool to start without sword
-        //GetSword = false;
-        sword_sprite.SetActive(false);
+        //GetSword bool to start without sword if on starting level
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            GetSword = false;
+        }
+        else
+        {
+            sword_sprite.SetActive(true);
+        }
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -126,11 +132,6 @@ public class Player : MonoBehaviour
         DashCounter();
         SwordBoopCounter();
         Recoil();
-
-        if (GetSword)
-        {
-            sword_sprite.SetActive(true);
-        }
     }
 
     private void FixedUpdate()
@@ -205,7 +206,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump()
     {
-        //animator.SetBool("IsJumping", true);
+        animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             //AudioManager.instance.PlaySound("jump-ploing");
@@ -220,7 +221,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CancelJump()
     {
-        //animator.SetBool("IsJumping", false);
+        animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
@@ -405,11 +406,14 @@ public class Player : MonoBehaviour
     private float attackTime;
 
     public bool isAttacking = false;
+
     private void SwordBoop()
     {
-        if(attackTime <= 0)
+ 
+        if (attackTime <= 0)
         {
             isAttacking = true;
+
             attackTime = TOTAL_ATTACK_TIME;
             Collider2D[] enemiesHit;
             if (direction == Direction.up)
@@ -450,6 +454,8 @@ public class Player : MonoBehaviour
     {
         if (isAttacking)
         {
+            animator.SetBool("IsAttacking", true);
+            sword_sprite.SetActive(false);
             if (attackTime > 0)
             {
                 attackTime -= Time.deltaTime;
@@ -457,6 +463,8 @@ public class Player : MonoBehaviour
             else
             {
                 isAttacking = false;
+                animator.SetBool("IsAttacking", false);
+                sword_sprite.SetActive(true);
             }
         }
     }
