@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour
     public LayerMask wall;
     public float checkRadius;
     public SceneLoader sceneLoader;
-
+    public Vector2 lastCheckpointPos;
     public bool changingScenes = false;
+    public bool playerRespawn = false;
 
 
     //setup of singleton entity
@@ -33,6 +34,14 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(this);
+        player = FindObjectOfType<Player>();
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Debug.Log("levelLoaded");
+        playerRespawn = false;
+        player = FindObjectOfType<Player>();
     }
 
     /// <summary>
@@ -62,5 +71,6 @@ public class GameManager : MonoBehaviour
     public void ReloadScene()
     {
         instance.sceneLoader.FadeToScene(SceneManager.GetActiveScene().name);
-    }
+        //player.transform.position = lastCheckpointPos;
+    }    
 }

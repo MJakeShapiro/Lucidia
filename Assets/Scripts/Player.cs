@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     //Animator/Art variables for the player
     public Animator animator;
     private bool m_FacingRight = true;
-    public bool GetSword =false;
+    public bool GetSword;
     public GameObject sword_sprite;
 
 
@@ -79,9 +79,15 @@ public class Player : MonoBehaviour
     #region Initialization
     private void Awake()
     {
-        //GetSword bool to start without sword
-        //GetSword = false;
-        sword_sprite.SetActive(false);
+        //GetSword bool to start without sword if on starting level
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            GetSword = false;
+        }
+        else
+        {
+            sword_sprite.SetActive(true);
+        }
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -94,6 +100,7 @@ public class Player : MonoBehaviour
         controls.Player.Dash.performed += _ => Dash();
         controls.Player.Attack.performed += _ => SwordBoop();
 
+        RespawnPos();
 
     }
 
@@ -118,11 +125,6 @@ public class Player : MonoBehaviour
         DashCounter();
         SwordBoopCounter();
         Recoil();
-
-        if (GetSword)
-        {
-            sword_sprite.SetActive(true);
-        }
     }
 
     private void FixedUpdate()
@@ -197,7 +199,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump()
     {
-        //animator.SetBool("IsJumping", true);
+        animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
             //AudioManager.instance.PlaySound("jump-ploing");
@@ -212,7 +214,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CancelJump()
     {
-        //animator.SetBool("IsJumping", false);
+        animator.SetBool("IsJumping", false);
         isJumping = false;
         cancelJumpingQueue = true;
     }
@@ -292,7 +294,7 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             animator.SetBool("IsDashing", true);
-            AudioManager.instance.PlaySound("dash2");
+            //AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
@@ -399,11 +401,14 @@ public class Player : MonoBehaviour
     private float attackTime;
 
     public bool isAttacking = false;
+
     private void SwordBoop()
     {
-        if(attackTime <= 0)
+ 
+        if (attackTime <= 0)
         {
             isAttacking = true;
+
             attackTime = TOTAL_ATTACK_TIME;
             Collider2D[] enemiesHit;
             if (direction == Direction.up)
@@ -444,6 +449,8 @@ public class Player : MonoBehaviour
     {
         if (isAttacking)
         {
+            animator.SetBool("IsAttacking", true);
+            sword_sprite.SetActive(false);
             if (attackTime > 0)
             {
                 attackTime -= Time.deltaTime;
@@ -451,6 +458,8 @@ public class Player : MonoBehaviour
             else
             {
                 isAttacking = false;
+                animator.SetBool("IsAttacking", false);
+                sword_sprite.SetActive(true);
             }
         }
     }
@@ -503,8 +512,8 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 launchPower;
     public void Die()
     {
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0.0f;
+        OnDisable();
+        GameManager.Instance.playerRespawn = true;
         GameManager.Instance.ReloadScene();
     }
 
@@ -512,9 +521,17 @@ public class Player : MonoBehaviour
     {
         if (rb.IsTouchingLayers(enemies))
         {
-            Debug.Log("HERE");
             Die();
         }
+    }
+
+    private void RespawnPos()
+    {
+        Debug.Log("In RespawnPos");
+        if (GameManager.Instance.playerRespawn)                                                         // If player has died and is being respawned
+            transform.position = GameManager.Instance.lastCheckpointPos;    // Set their position to the last checkpoint
+        else
+            GameManager.Instance.lastCheckpointPos = transform.position;    // Else a new scene is loaded, thus new checkpoint is the starting pos
     }
 
     #endregion Death
@@ -548,7 +565,6 @@ public class Player : MonoBehaviour
     #region FallDetector
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Whats going on?");
         if(other.tag == "FallDetector")
         {
             Debug.Log("Fall Detected!");

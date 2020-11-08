@@ -11,12 +11,14 @@ public class SceneLoader : MonoBehaviour
     public Slider slider;
 
     private string sceneToLoad;
+    int StartScene = 0;
+
 
     public void FadeToScene(string sceneName)
     {
         if (GameManager.Instance.changingScenes)
             return;
-
+        Time.timeScale = 0.0f;
         GameManager.Instance.changingScenes = true;
         sceneToLoad = sceneName;
         animator.SetTrigger("FadeOut");
@@ -25,6 +27,8 @@ public class SceneLoader : MonoBehaviour
     public void OnFadeComplete()
     {
         SceneManager.LoadScene(sceneToLoad);
+        Time.timeScale = 1.0f;
+       
         animator.SetTrigger("FadeIn");
         GameManager.Instance.changingScenes = false;
     }
@@ -53,5 +57,16 @@ public class SceneLoader : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void LoadStartScene()
+    {
+        SceneManager.LoadScene(StartScene);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("QUIITTTT!!!!");
+        Application.Quit();
     }
 }
