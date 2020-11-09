@@ -176,6 +176,8 @@ public class Player : MonoBehaviour
             animator.SetBool("IsDashing", false);
             if (!GameManager.Instance.IsGrounded(feetPos))
             {
+                AudioManager.instance.StopSound("Walk_1");
+                AudioManager.instance.is_walking = false;
                 if (moveDirection.x != 0)
                 {
                     rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
@@ -188,8 +190,24 @@ public class Player : MonoBehaviour
             }
             else
             {
+                if (AudioManager.instance.has_jumped && !isJumping)
+                {
+                    AudioManager.instance.PlaySound("Land_1");
+                    AudioManager.instance.has_jumped = false;
+                    Debug.LogWarning("LANDED!");
+                }
                 airVelocity = Vector2.zero;
                 rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+                if (moveDirection.x != 0 && !AudioManager.instance.is_walking)
+                {
+                    AudioManager.instance.PlaySound("Walk_1");
+                    AudioManager.instance.is_walking = true;
+                }
+                else if (moveDirection.x == 0)
+                {
+                    AudioManager.instance.StopSound("Walk_1");
+                    AudioManager.instance.is_walking = false;
+                }
             } 
         }   
     }
@@ -202,7 +220,8 @@ public class Player : MonoBehaviour
         animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
-            //AudioManager.instance.PlaySound("jump-ploing");
+            AudioManager.instance.PlaySound("Jump_1");
+            AudioManager.instance.has_jumped = true;
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpCounter = MIN_JUMP_COUNTER;
@@ -294,7 +313,9 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             animator.SetBool("IsDashing", true);
-            //AudioManager.instance.PlaySound("dash2");
+            AudioManager.instance.StopSound("Walk_1");
+            AudioManager.instance.is_walking = false;
+            AudioManager.instance.PlaySound("dash2");
 
             if (!GameManager.Instance.IsGrounded(feetPos))
                 hasAirDashed = true;
@@ -408,6 +429,9 @@ public class Player : MonoBehaviour
         if (attackTime <= 0)
         {
             isAttacking = true;
+            AudioManager.instance.StopSound("Walk_1");
+            AudioManager.instance.is_walking = false;
+            AudioManager.instance.PlaySound("Sword_1");
 
             attackTime = TOTAL_ATTACK_TIME;
             Collider2D[] enemiesHit;
@@ -512,6 +536,14 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 launchPower;
     public void Die()
     {
+        if (!AudioManager.instance.killed_by_enemy)
+        {
+            AudioManager.instance.PlaySound("Fall_1");
+        }
+        else
+        {
+            AudioManager.instance.killed_by_enemy = false;
+        }    
         OnDisable();
         GameManager.Instance.playerRespawn = true;
         GameManager.Instance.ReloadScene();
@@ -521,6 +553,11 @@ public class Player : MonoBehaviour
     {
         if (rb.IsTouchingLayers(enemies))
         {
+            AudioManager.instance.StopSound("Walk_1");
+            AudioManager.instance.is_walking = false;
+            //AudioManager.instance.PlaySound("Death_1");
+            AudioManager.instance.killed_by_enemy = true;
+            Debug.LogWarning("DEATH!");
             Die();
         }
     }

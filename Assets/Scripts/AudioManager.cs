@@ -56,6 +56,12 @@ public class AudioManager : MonoBehaviour
 
     public int music_selection = 0;
 
+    public bool killed_by_enemy = false;
+
+    public bool has_jumped = false;
+
+    public bool is_walking = false;
+
     void Awake()
     {
         if (instance != null)
