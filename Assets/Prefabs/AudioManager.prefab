@@ -155,5 +155,56 @@ MonoBehaviour:
     volMULT: 0
     pitMULT: 0
     loop: 1
-    isMusic: 1
+    isMusic: 0
+  - name: Fall_1
+    clip: {fileID: 8300000, guid: ff4fa9721872c464eb5b0adea39d7c0d, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 0
+    isMusic: 0
+  - name: Death_1
+    clip: {fileID: 8300000, guid: 20cd692483cdfee4aa9931b6ded60f99, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 0
+    isMusic: 0
+  - name: Jump_1
+    clip: {fileID: 8300000, guid: 483f4a37143c5ef478b14e2c9e2391e4, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 0
+    isMusic: 0
+  - name: Land_1
+    clip: {fileID: 8300000, guid: 8fa4311bcf3cd5248a0b6beea77e55b5, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 0
+    isMusic: 0
+  - name: Sword_1
+    clip: {fileID: 8300000, guid: 8d9c57ddc22bc174bb1619620e7ee266, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 0
+    isMusic: 0
+  - name: Walk_1
+    clip: {fileID: 8300000, guid: e892c0d5051aa634884fadfa74ca96cb, type: 3}
+    volume: 1
+    pitch: 1
+    volMULT: 0.1
+    pitMULT: 0.1
+    loop: 1
+    isMusic: 0
   music_selection: 0
+  killed_by_enemy: 0
+  has_jumped: 0
+  is_walking: 0
