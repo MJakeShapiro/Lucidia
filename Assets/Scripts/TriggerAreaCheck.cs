@@ -15,6 +15,7 @@ public class TriggerAreaCheck : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Inside triggerAreaChecker");
             gameObject.SetActive(false);
             enemyParent.target = collider.transform;
             enemyParent.inRange = true;

@@ -14,9 +14,10 @@ public class EnemyBehaviour : MonoBehaviour
     [HideInInspector]public bool inRange; //Check if Player is in range
     public GameObject hotZone;
     public GameObject triggerArea;
-    #endregion
+  #endregion
 
-    #region Private Variables
+  #region Private Variables
+    private Animator anim;
     private float distance; //Store the distance b/w enemy and player
     private bool attackMode;
     private bool cooling; //Check if Enemy is cooling after attack
@@ -29,8 +30,9 @@ public class EnemyBehaviour : MonoBehaviour
         SelectTarget();
         intTimer = timer; //Store the inital value of timer
         //animation component here
+        anim = GetComponent<Animator>();
     }
-    // Update is called once per frame
+
     void Update()
     {
         if (!attackMode)
@@ -38,7 +40,7 @@ public class EnemyBehaviour : MonoBehaviour
             Move();
         }
 
-        if(!InsideofLimits() && !inRange)
+        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack"))
         {
             SelectTarget();
         }
@@ -54,7 +56,7 @@ public class EnemyBehaviour : MonoBehaviour
         distance = Vector2.Distance(transform.position, target.position);
 
         if(distance > attackDistance)
-        {
+        { 
             StopAttack();
         }
         else if(attackDistance >= distance && cooling == false)
@@ -64,14 +66,20 @@ public class EnemyBehaviour : MonoBehaviour
         if (cooling)
         {
             //stop attack animation
+            Cooldown();
+            anim.SetBool("Attack", false);
         }
     }
 
     void Move()
     {
-        Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
+        anim.SetBool("canWalk", true);
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack"))
+        {
+            Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
     }
 
     void Attack()
@@ -80,13 +88,26 @@ public class EnemyBehaviour : MonoBehaviour
         attackMode = true; //To check if Enemy can attack or not
 
         //attack animation
+        anim.SetBool("canWalk", false);
+        anim.SetBool("Attack", true);
+    }
+
+    void Cooldown()
+    {
+      timer -= Time.deltaTime;
+      
+      if(timer <= 0 && cooling && attackMode)
+      {
+        cooling = false;
+        timer = intTimer;
+      }
     }
 
     void StopAttack()
     {
         cooling = false;
         attackMode = false;
-
+        anim.SetBool("Attack", false);
     }
 
     private bool InsideofLimits()
@@ -107,6 +128,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             target = rightLimit;
         }
+
         Flip();
     }
 
@@ -115,13 +137,18 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 rotation = transform.eulerAngles;
         if(transform.position.x > target.position.x)
         {
-            rotation.y = 0f;
+            rotation.y = 180;
         }
         else
         {
-            rotation.y = 180f;
+            rotation.y = 0;
         }
 
         transform.eulerAngles = rotation;
+    }
+
+    public void TriggerCooling()
+    {
+        cooling = true;
     }
 }
