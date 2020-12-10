@@ -16,14 +16,17 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        sentences = new Queue<string>();
-
-        player = FindObjectOfType<Player>();
+        if (sentences == null)
+        {
+            sentences = new Queue<string>();
+        }
     }
 
     public void StartDialogue (Dialogue dialogue)
     {
         animator.SetBool("IsOpen", true);
+
+        Debug.Log("Why");
 
         player.dialogue = true;
 
@@ -31,7 +34,14 @@ public class DialogueManager : MonoBehaviour
 
         nameText.text = dialogue.name;
 
-        sentences.Clear();
+        if (sentences != null)
+        {
+            sentences.Clear();
+        }
+        else
+        {
+            sentences = new Queue<string>();
+        }
 
         foreach (string sentence in dialogue.sentences)
         {
