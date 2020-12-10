@@ -16,7 +16,7 @@ public class HotZoneCheck : MonoBehaviour
 
     private void Update()
     {
-        if (nRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_walk"))
+        if (nRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Walk"))
         {
             Debug.Log("Something happened here");
             enemyParent.Flip();

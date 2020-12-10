@@ -31,7 +31,7 @@ public class EnemyBehaviour : MonoBehaviour
         intTimer = timer; //Store the inital value of timer
         //animation component here
         anim = GetComponent<Animator>();
-        anim.SetBool("canWalk", true);
+        //anim.SetBool("canWalk", true);
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class EnemyBehaviour : MonoBehaviour
             Move();
         }
 
-        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack"))
+        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
         {
             SelectTarget();
         }
@@ -78,7 +78,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Move()
     {
         anim.SetBool("canWalk", true);
-        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack"))
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
         {
             Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
