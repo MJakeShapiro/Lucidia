@@ -16,7 +16,7 @@ public class HotZoneCheck : MonoBehaviour
 
     private void Update()
     {
-        if (nRange)// && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        if (nRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             Debug.Log("Something happened here");
             enemyParent.Flip();
@@ -37,11 +37,11 @@ public class HotZoneCheck : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-           // anim.SetBool("Attack", false);
+            anim.SetBool("Attack", false);
             nRange = false;
             gameObject.SetActive(false);
             enemyParent.triggerArea.SetActive(true);
-            //anim.SetBool("canWalk", true);
+            anim.SetBool("canWalk", true);
             enemyParent.inRange = false;
             enemyParent.SelectTarget();
         }
