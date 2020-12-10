@@ -363,8 +363,6 @@ public class Player : MonoBehaviour
         {
             if (dashTime <= 0.0f)
             {
-                Debug.LogError("boosted: " + boosted);
-                Debug.LogError("canDash: " + canDash);
                 rb.velocity = Vector2.zero;
                 rb.gravityScale = 4.0f;
                 isDashing = false;
