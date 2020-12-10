@@ -31,7 +31,7 @@ public class EnemyBehaviour : MonoBehaviour
         intTimer = timer; //Store the inital value of timer
         //animation component here
         anim = GetComponent<Animator>();
-        anim.SetBool("canWalk", true);
+        //anim.SetBool("canWalk", true);
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class EnemyBehaviour : MonoBehaviour
             Move();
         }
 
-        if (!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
+        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
         {
             SelectTarget();
         }
@@ -70,7 +70,7 @@ public class EnemyBehaviour : MonoBehaviour
             Attack();
             Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime * 4);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime * 3);
         }
         if (cooling)
         {
