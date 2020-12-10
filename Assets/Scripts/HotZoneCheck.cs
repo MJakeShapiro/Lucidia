@@ -5,7 +5,7 @@ using UnityEngine;
 public class HotZoneCheck : MonoBehaviour
 {
     private EnemyBehaviour enemyParent;
-    private bool inRange;
+    private bool nRange;
     private Animator anim;
 
     private void Awake()
@@ -16,7 +16,7 @@ public class HotZoneCheck : MonoBehaviour
 
     private void Update()
     {
-        if (inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack"))
+        if (nRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_attack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Fear_walk"))
         {
             Debug.Log("Something happened here");
             enemyParent.Flip();
@@ -29,7 +29,7 @@ public class HotZoneCheck : MonoBehaviour
         if (collider.gameObject.CompareTag("Player"))
         {
             Debug.Log("Inside hotzone trigger");
-            inRange = true;
+            nRange = true;
         }
     }
 
@@ -37,9 +37,11 @@ public class HotZoneCheck : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            inRange = false;
+            anim.SetBool("Attack", false);
+            nRange = false;
             gameObject.SetActive(false);
             enemyParent.triggerArea.SetActive(true);
+            anim.SetBool("canWalk", true);
             enemyParent.inRange = false;
             enemyParent.SelectTarget();
         }

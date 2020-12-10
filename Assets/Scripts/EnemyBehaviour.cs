@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    #region Public Variables
+  #region Public Variables
     public float attackDistance; //Minimum distance for attack
     public float moveSpeed;
     public float timer; //Timer for cooldown between attacks
@@ -31,6 +31,7 @@ public class EnemyBehaviour : MonoBehaviour
         intTimer = timer; //Store the inital value of timer
         //animation component here
         anim = GetComponent<Animator>();
+        anim.SetBool("canWalk", true);
     }
 
     void Update()
@@ -51,7 +52,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
-    void EnemyLogic()
+    public void EnemyLogic()
     {
         distance = Vector2.Distance(transform.position, target.position);
 
@@ -62,12 +63,15 @@ public class EnemyBehaviour : MonoBehaviour
         else if(attackDistance >= distance && cooling == false)
         {
             Attack();
+            Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
+
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime * 4);
         }
         if (cooling)
         {
             //stop attack animation
-            Cooldown();
             anim.SetBool("Attack", false);
+            Cooldown();
         }
     }
 
