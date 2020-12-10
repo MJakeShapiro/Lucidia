@@ -51,6 +51,9 @@ MonoBehaviour:
   wall:
     serializedVersion: 2
     m_Bits: 1024
+  rift:
+    serializedVersion: 2
+    m_Bits: 8192
   checkRadius: 0.1
   sceneLoader: {fileID: 2648458877968392360}
   lastCheckpointPos: {x: 0, y: 0}
