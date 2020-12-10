@@ -41,7 +41,7 @@ public class EnemyBehaviour : MonoBehaviour
             Move();
         }
 
-        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if (!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
         {
             SelectTarget();
         }
@@ -49,6 +49,11 @@ public class EnemyBehaviour : MonoBehaviour
         if (inRange)
         {
             EnemyLogic();
+        }
+        else
+        {
+
+            StopAttack();
         }
     }
 
@@ -78,7 +83,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Move()
     {
         anim.SetBool("canWalk", true);
-        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_Attack"))
         {
             Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
