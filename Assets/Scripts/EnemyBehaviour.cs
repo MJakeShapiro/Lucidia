@@ -31,7 +31,7 @@ public class EnemyBehaviour : MonoBehaviour
         intTimer = timer; //Store the inital value of timer
         //animation component here
         anim = GetComponent<Animator>();
-        anim.SetBool("canWalk", true);
+        //anim.SetBool("canWalk", true);
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class EnemyBehaviour : MonoBehaviour
             Move();
         }
 
-        if(!InsideofLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if (!InsideofLimits() && !inRange)// && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             SelectTarget();
         }
@@ -49,6 +49,11 @@ public class EnemyBehaviour : MonoBehaviour
         if (inRange)
         {
             EnemyLogic();
+        }
+        else
+        {
+
+            StopAttack();
         }
     }
 
@@ -77,7 +82,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Move()
     {
-        anim.SetBool("canWalk", true);
+        //anim.SetBool("canWalk", true);
         if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
@@ -92,8 +97,8 @@ public class EnemyBehaviour : MonoBehaviour
         attackMode = true; //To check if Enemy can attack or not
 
         //attack animation
-        anim.SetBool("canWalk", false);
-        anim.SetBool("Attack", true);
+        //anim.SetBool("canWalk", false);
+        //anim.SetBool("Attack", true);
     }
 
     void Cooldown()
@@ -111,7 +116,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         cooling = false;
         attackMode = false;
-        anim.SetBool("Attack", false);
+        //anim.SetBool("Attack", false);
     }
 
     private bool InsideofLimits()
