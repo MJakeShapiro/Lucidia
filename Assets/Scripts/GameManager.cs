@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Player player;
     public LayerMask ground;
     public LayerMask wall;
+    public LayerMask rift;
     public float checkRadius;
     public SceneLoader sceneLoader;
     public Vector2 lastCheckpointPos;
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         player = FindObjectOfType<Player>();
-    }
+}
 
     private void OnLevelWasLoaded(int level)
     {
@@ -50,7 +51,15 @@ public class GameManager : MonoBehaviour
     /// <returns>True if object is on ground. False otherwise</returns>
     public bool IsGrounded(Transform feetPos)
     {
-        return Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
+        if (Physics2D.OverlapCircle(feetPos.position, checkRadius, ground) || Physics2D.OverlapCircle(feetPos.position, checkRadius, rift))
+            return true;
+        else
+            return false;
+    }
+
+    public bool IsStandingOnAnything(Transform feetPos)
+    {
+        return Physics2D.OverlapCircle(feetPos.position, checkRadius);
     }
     
 
