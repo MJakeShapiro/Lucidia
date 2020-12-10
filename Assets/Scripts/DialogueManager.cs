@@ -12,14 +12,20 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> sentences;
 
+    public Player player;
+
     void Start()
     {
         sentences = new Queue<string>();
+
+        player = FindObjectOfType<Player>();
     }
 
     public void StartDialogue (Dialogue dialogue)
     {
         animator.SetBool("IsOpen", true);
+
+        player.dialogue = true;
 
         Debug.Log("Starting conversation with " + dialogue.name);
 
@@ -50,6 +56,7 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue ()
     {
+        player.dialogue = false;
         animator.SetBool("IsOpen", false);
         Debug.Log("End of conversation");
     }

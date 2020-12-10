@@ -62,6 +62,8 @@ public class AudioManager : MonoBehaviour
 
     public bool is_walking = false;
 
+    public DialogueTrigger thing;
+
     void Awake()
     {
         if (instance != null)
@@ -106,6 +108,8 @@ public class AudioManager : MonoBehaviour
         }
 
         PlaySound(music[music_selection].name);
+
+        thing.TriggerDialogue();
     }
 
     public void PlaySound(string _name)

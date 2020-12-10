@@ -53,6 +53,8 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool inRift = false;
     [HideInInspector] public bool boosted = false;
 
+    [HideInInspector] public bool dialogue = false;
+
     //[Header("Attack")]
     //[SerializeField] private Transform attackPos;
     //[SerializeField] private LayerMask enemies;
@@ -217,6 +219,12 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump()
     {
+        if (dialogue)
+        {
+            FindObjectOfType<DialogueManager>().DisplayNextSentence();
+            return;
+        }
+
         animator.SetBool("IsJumping", true);
         if (GameManager.Instance.IsGrounded(feetPos))
         {
