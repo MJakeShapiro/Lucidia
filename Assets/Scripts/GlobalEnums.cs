@@ -22,11 +22,3 @@ public enum RecoilDir
     left,
     right
 }
-
-public enum EnemyActions
-{
-    attack,
-    patrol,
-    goToWaypoint,
-    idle
-}
